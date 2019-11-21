@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="liuyun's blog" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="不仅是Unix，其他很多操作系统都实现了标准IO库。 流和FILE对象对于ASCII字符集，一个字符用一个字节表示。对于国际字符集，一个字符可用多个字节表示。标准I&#x2F;O文件流可用于单字节或多字节（“宽”）字符集。流的定向(stream’s orientation)决定了所读、写的字符是单字节还是多字节的。当一个流最初被创建时，它并没有定向。如若在未定向的流上使用一个多字节IO函数（见&amp;lt;wch">
+<meta name="keywords" content="unix 标准IO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="unix环境高级编程：标准IO库">
+<meta property="og:url" content="liuyun594@github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%A0%87%E5%87%86IO%E5%BA%93&#x2F;index.html">
+<meta property="og:site_name" content="liuyun&#39;s blog">
+<meta property="og:description" content="不仅是Unix，其他很多操作系统都实现了标准IO库。 流和FILE对象对于ASCII字符集，一个字符用一个字节表示。对于国际字符集，一个字符可用多个字节表示。标准I&#x2F;O文件流可用于单字节或多字节（“宽”）字符集。流的定向(stream’s orientation)决定了所读、写的字符是单字节还是多字节的。当一个流最初被创建时，它并没有定向。如若在未定向的流上使用一个多字节IO函数（见&amp;lt;wch">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-21T00:06:44.811Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="liuyun594@github.io/2019/11/03/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%A0%87%E5%87%86IO%E5%BA%93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>unix环境高级编程：标准IO库 | liuyun's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">liuyun's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="liuyun594@github.io/2019/11/03/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%A0%87%E5%87%86IO%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="liuyun">
+      <meta itemprop="description" content="blog of liuyun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="liuyun's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          unix环境高级编程：标准IO库
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-03 08:05:20" itemprop="dateCreated datePublished" datetime="2019-11-03T08:05:20+08:00">2019-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-21 08:06:44" itemprop="dateModified" datetime="2019-11-21T08:06:44+08:00">2019-11-21</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>不仅是Unix，其他很多操作系统都实现了标准IO库。</p>
+<h3 id="流和FILE对象"><a href="#流和FILE对象" class="headerlink" title="流和FILE对象"></a>流和FILE对象</h3><p>对于ASCII字符集，一个字符用一个字节表示。对于国际字符集，一个字符可用多个字节表示。标准I/O文件流可用于单字节或多字节（“宽”）字符集。流的定向(stream’s orientation)决定了所读、写的字符是单字节还是多字节的。当一个流最初被创建时，它并没有定向。如若在未定向的流上使用一个多字节IO函数（见&lt;wchar.h&gt;），则讲该流的定向设置为宽定向的。若在未定向的流上使用一个单字节IO函数，则将该流的定向设为字节定向的。只有两个函数可以改变流的定向。freopen函数（稍后讨论）清除一个流的定向；fwide函数可用于设置流的定向。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;wchar.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fwide</span><span class="params">(FILE* fp, <span class="keyword">int</span> mode)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若流是宽定向的，返回正值；若流是字节定向的，返回负值；若流是未定向的，返回0 */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>根据mode参数的不同值，fwide函数执行不同的工作。</p>
+<ul>
+<li>如若mode参数值为负，fwide将试图使指定的流是字节定向的。</li>
+<li>如若mode参数值为正，fwide将试图使指定的流是宽定向的。</li>
+<li>如若mode参数值为0，fwide将不试图设置流的定向，但返回标示该流定向的值。  </li>
+</ul>
+<p>注意，fwide并不改变已定向流的定向。还应注意的是，fwide无出错返回。试想，如若流是无效的，那么将发生什么呢？我们唯一可依靠的是，调用fwide前先清除errno，从fwide返回时检查errno的值。  </p>
+<p>当打开一个流时，标准IO函数fopen返回一个指向FILE对象的指针。该对象通常是一个结构，它包含了标准IO库为管理该流需要的所有信息，包括用于实际IO的文件描述符、指向用于该流缓冲区的指针、缓冲区的长度、当前在缓冲区中的字符数以及出错标志等。  </p>
+<p>应用程序没有必要检验FILE对象。为了引用一个流，需将FILE指针作为参数传递给每个标准IO函数。其后称指向FILE对象的指针（类型为FILE *）为文件指针。  </p>
+<h3 id="标准输入、标准输出和标准错误"><a href="#标准输入、标准输出和标准错误" class="headerlink" title="标准输入、标准输出和标准错误"></a>标准输入、标准输出和标准错误</h3><p>对一个进程预定义了3个流，并且这3个流可以自动地被进程使用，它们是：标准输入、标准输出和标准错误。这些流引用的文件与文件描述符STDIN_FILENO、STDOUT_FILENO、STDERR_FILENO所引用的相同。  </p>
+<p>这3个标准IO流通过预定义文件指针stdin、stdout、stderr加以引用。这3个文件指针定义在头文件&lt;stdio.h&gt;中。  </p>
+<h3 id="缓冲"><a href="#缓冲" class="headerlink" title="缓冲"></a>缓冲</h3><p>标准IO库提供缓冲的目的是尽可能减少使用read和write调用的次数。它也对每个IO流自动地进行缓冲管理，从而避免了应用程序需要考虑这一点缩到来的麻烦。遗憾的是，标准IO库最令人疑惑的也是它的缓冲。  </p>
+<p>标准IO提供了以下三种类型的缓冲：  </p>
+<ol>
+<li>全缓冲。在这种情况下，在填满标准IO缓冲区后才进行实际IO操作。对于驻留在磁盘上的文件通常是由标准IO库实施全缓冲的。在一个流上执行一次IO操作时，相关标准IO函数通常使用malloc获得需使用的缓冲区。术语冲洗（flush）说明标准IO缓冲区的写操作。缓冲区可由标准IO例程自动地冲洗（例如。当填满一个缓冲区时），或者可以调用函数fflush冲洗一个流。值得注意的是，在UNIX环境中，flush有两种意思。在标准IO库方面，flush（冲洗）意味着将缓冲区中的内容写到磁盘上（该缓冲区可能只是部分填满的）。在终端驱动程序方面，flush表示丢弃已存储在缓冲区中的数据。</li>
+<li>行缓冲。在这种情况下，当在输入和输出中遇到换行符时，标准IO库执行IO操作。这允许我们一次输出一个字符（用标准IO函数fputc）。但只有在写了一行之后才进行实际IO操作。当流设计一个终端时（如标准输入和标准输出），通常使用行缓冲。对于行缓冲有两个限制。第一，因为标准IO库用来收集每一行的缓冲区的长度是固定的，所以只要填满了缓冲区，那么即使还没有写一个换行符，也进行IO操作。第二，任何时候只要通过标准IO库要求从(a)一个不带缓冲的流，或者(b)一个行缓冲的流（它从内核请求需要数据）得到输入数据，那么就会冲洗所有行缓冲输出流，它并不要求一定从内核读数据。很明显，从一个不带缓冲的流中输入（即(a)项）需要从内核获得数据。</li>
+<li>不带缓冲。标准IO库不对字符进行缓冲存储。例如，若用标准IO函数fputs写15个字符到不带缓冲的流中，我们就期望这15个字符能立即输出，很可能使用write函数将这些字符写到相关联的打开文件中。标准错误流stderr通常是不带缓冲的，这就使得出错信息可以尽快显示出来，而不管他们是否含有一个换行符。</li>
+</ol>
+<p>但是，这并没有告诉我们如果标准输入和标准输出指向交互式设备时，它们是不带缓冲的还是行缓冲的；以及错误是不带缓冲的还是行缓冲的。很多系统默认使用下列类型的缓冲：  </p>
+<ul>
+<li>标准错误是不带缓冲的。</li>
+<li>若是指向终端设备的流，则是行缓冲的；否则是全缓冲的。</li>
+</ul>
+<p>对于一个给定的流，如果我们并不喜欢这些系统默认，则可调用下列两个函数中的一个更改缓冲类型。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setbuf</span><span class="params">(FILE* <span class="keyword">restrict</span> fp, <span class="keyword">char</span>* <span class="keyword">restrict</span> buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setvbuf</span><span class="params">(FILE* <span class="keyword">restrict</span> fp, <span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">int</span> mode, <span class="keyword">size_t</span> <span class="built_in">size</span>)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回0；若出错，返回非0 */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>这些函数一定要在流已经被打开后调用，而且也应在对该流执行任何一个其他操作之前调用。  </p>
+<p>使用setvbuf，我们可以精确地说明所需的缓冲类型。这是用mode参数实现的：  </p>
+<p>_IOFBF       全缓冲  </p>
+<p>_IOLBF       行缓冲  </p>
+<p>_IONBF      不缓冲  </p>
+<p>如果指定一个不带缓冲的流，则忽略buf 和size参数。如果指定全缓冲或行缓冲，则buf和size可选择地制定一个缓冲区及其长度。如果该流是带缓冲的，而buf是NULL，则标准IO库将自动地为该流分配适当长度的缓冲区。适当长度指的是由敞亮BUFSIZ所指定的值。  </p>
+<blockquote>
+<p>某些C函数库实现使用stat结构中的成员st_blksize所指定的值决定最佳IO缓冲区长度。GUN C函数库就使用这种方法。</p>
+</blockquote>
+<p>任何时候，我们都可以前置冲洗一个流。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fflush</span><span class="params">(FILE* fp)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回0；若出错，返回值EOF */</span></span><br></pre></td></tr></table></figure>
+
+<p>此函数使该流所有未写的数据都被传送至内核。作为一种特殊情形，如果fp是NULL，则此函数将导致所有输出流被冲洗。  </p>
+<h3 id="打开流"><a href="#打开流" class="headerlink" title="打开流"></a>打开流</h3><p>下列3个函数打开一个标准流。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">FILE* <span class="title">fopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> pathname, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> type)</span></span>;</span><br><span class="line"><span class="function">FILE* <span class="title">freopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> pathname, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> type, FILE* <span class="keyword">restrict</span> fp)</span></span>;</span><br><span class="line"><span class="function">FILE* <span class="title">fdopen</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *type)</span></span>;</span><br><span class="line"><span class="comment">/* 3个函数的返回值：若成功，返回文件指针；若出错，返回NULL */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>这3个函数的区别如下：  </p>
+<ol>
+<li>fopen函数打开路径名为pathname的一个指定文件。</li>
+<li>freopen函数在一个指定的流上打开一个指定的文件，如若该流已经打开，则先关闭该流。若该流已经定向，则使用freopen清除该定向。此函数一般用于将一个制定的文件打开为一个预定义的流：标准输入、标准输出和标准错误。</li>
+<li>fdopen函数取一个已有的文件描述符（我们可能从open、dup、dup2、fcntl、pipe、sockesocketpair或accept函数得到此文件描述符），并使一个标准的IO流与该描述符相结合。此函数常用于由常见管道和网络通信通道函数返回的描述符。因为这些特殊类型的文件不能用标准IO函数打开，所以我们必须先调用设备专用函数以获得一个文件描述符，然后用fdopen使一个标准IO流与该描述符相结合。  </li>
+</ol>
+<blockquote>
+<p>fopen接freopen是ISO C的所属部分。而ISO C并不涉及文件描述符，所以仅有POSIX.1具有fdopen。</p>
+</blockquote>
+<p>type参数制定对该IO流的读写方式，ISO C规定type参数可以有15种不同的值。  </p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>说明</th>
+<th>open(2)标志</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r或rb</td>
+<td>为读而打开</td>
+<td>O_RDONY</td>
+</tr>
+<tr>
+<td>w或wb</td>
+<td>把文件截断至0长，或为写而创建</td>
+<td>O_WRONLY|O_CREAT|O_TRUNC</td>
+</tr>
+<tr>
+<td>a或ab</td>
+<td>追加；为在文件尾写而打开，或为写而创建</td>
+<td>O_WRONLY|O_APPEND|O_CREAT</td>
+</tr>
+<tr>
+<td>r+或r+b或rb+</td>
+<td>为读和写而打开</td>
+<td>O_RDWR</td>
+</tr>
+<tr>
+<td>w+或w+b或wb+</td>
+<td>把文件截至0长，或为读和写而打开</td>
+<td>O_RDWR|O_CREAT|O_TRUNC</td>
+</tr>
+<tr>
+<td>a+或a+b或ab+</td>
+<td>为在文件尾读和写打开或创建</td>
+<td>O_RDWR|O_CREAT|O_APPEND</td>
+</tr>
+</tbody></table>
+<p>fdopen为写而打开并不截断该文件。另外，标准IO追加写方式也不能用于创建该文件。  </p>
+<p>当以读和写类型打开一个文件时(type中带+号)，具有下列限制。</p>
+<ul>
+<li>如果中间没有fflush、fseek、fsetpos或rewind，则在输出后面不能直接跟随输入。</li>
+<li>如果中间没有fseek、fsetpos或frewind，或者一个输入操作没有到达文件尾端，则在输入操作后不能直接跟随输出。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>限制</th>
+<th>r</th>
+<th>w</th>
+<th>a</th>
+<th>r+</th>
+<th>w+</th>
+<th>a+</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件必须存在</td>
+<td>*</td>
+<td></td>
+<td></td>
+<td>*</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>放弃文件以前的内容</td>
+<td></td>
+<td>*</td>
+<td></td>
+<td></td>
+<td>*</td>
+<td></td>
+</tr>
+<tr>
+<td>流可以读</td>
+<td>*</td>
+<td></td>
+<td></td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+</tr>
+<tr>
+<td>流可以写</td>
+<td></td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+</tr>
+<tr>
+<td>流只可在尾端处写</td>
+<td></td>
+<td></td>
+<td>*</td>
+<td></td>
+<td></td>
+<td>*</td>
+</tr>
+</tbody></table>
+<p>注意，在指定w或a类型创建一个新文件时，我们无法寿命该文件的访问权限位。POSIX.1要求使用如下的权限位集来创建文件：  </p>
+<p>S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH  </p>
+<p>调用fclose关闭一个打开的流。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fclose</span><span class="params">(FILE* fp)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回0；若失败，返回EOF */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>在该文件被关闭之前，冲洗缓冲区中的输出数据。缓冲区中的任何输入数据被丢弃。如果标准IO库已经为该流自动分配了一个缓冲区，则释放该缓冲器。  </p>
+<p>当一个进程正常终止时（直接调用exit函数，或从main函数返回），则所有未写缓冲数据的标准IO流都被冲洗，所有打开的标准IO流都被关闭。  </p>
+<h3 id="读和写流"><a href="#读和写流" class="headerlink" title="读和写流"></a>读和写流</h3><p>一旦打开了流，则可在3种不同类型的非格式化IO中进行选择，对其进行读、写操作。  </p>
+<ol>
+<li>每次一个字符的IO。一次读或写一个字符，如果流是带缓冲的，则标准IO函数处理所有缓冲。  </li>
+<li>每次一行的IO。如果想要一次读或写一行，则使用fgets和fputs。每行都以一个换行符终止。当调用fgets时，应说明能处理的最大行长。  </li>
+<li>直接IO，fread和fwrite函数支持这种IO。每次IO操作读或写某种数量的对象，每个对象具有指定的长度。这两个函数常用于从二进制文件中每次读或写一个结构。   </li>
+</ol>
+<h4 id="1-输入函数"><a href="#1-输入函数" class="headerlink" title="1. 输入函数"></a>1. 输入函数</h4><p>以下3个函数可用以一次读一个字符。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getc</span><span class="params">(FILE* fp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fgetc</span><span class="params">(FILE* fp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getchar</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回下一个字符；若已达文件尾端或出错，返回EOF */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>函数getchar等同于getc(stdin)。前两个函数的区别是，getc可被实现为宏，而fgetc不能实现为宏。这意味着以下几点：   </p>
+<ol>
+<li>getc的参数不应当是具有副作用的表达式，因为它可能会被计算多次。</li>
+<li>因为fgetc一定是个函数，所以可以得到其地址。这就允许将fgetc的地址作为一个参数传送给另一个函数。</li>
+<li>调用fgetc所需的时间可能比调用getc要长，因为调用函数所需的时间通常长于宏。</li>
+</ol>
+<p>注意，不管是出错还是达到文件尾端，这3个函数都是返回同样的值。为了区分这两种情况，必须调用ferror或feof。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ferror</span><span class="params">(FILE* fp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">feof</span><span class="params">(FILE* fp)</span></span>;</span><br><span class="line"><span class="comment">/* 两个函数返回值：若条件为真，返回0（真）；否则，返回非0（假） */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clearerr</span><span class="params">(FILE* fp)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在大多数实现中，为每个流在FILE对象中维护了两个标志。  </p>
+<ul>
+<li>出错标志；</li>
+<li>文件结束标志。</li>
+</ul>
+<p>调用clearerr可以清除这两个标志。  </p>
+<p>从流中读取数据以后，可以调用ungetc将字符再压送回流中。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ungetc</span><span class="params">(<span class="keyword">int</span> c, FILE* fp)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回c；若出错，返回EOF */</span></span><br></pre></td></tr></table></figure>
+
+<p>压送回到流中的字符以后可又可以从流中读出，但读出字符的顺序与压送顺序相反。  </p>
+<p>回送的私服，不一定必须是上一次读的字符。不能回送EOF。但是当已经到达文件尾端时，仍可以回送一个字符。下次读将返回该字符，再读则返回EOF。原因是一次成功的ungetc调用会清除该流的文件结束标志。   </p>
+<h4 id="2-输出函数"><a href="#2-输出函数" class="headerlink" title="2. 输出函数"></a>2. 输出函数</h4><p>对应于上面所述的每个输入函数都有一个输出函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">putc</span><span class="params">(<span class="keyword">int</span> c, FILE *fp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fputc</span><span class="params">(<span class="keyword">int</span> c, FILE* fp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">putchar</span><span class="params">(<span class="keyword">int</span> c)</span></span>;</span><br><span class="line"><span class="comment">/* 3个函数返回值：若成功，返回c；若出错，返回EOF */</span></span><br></pre></td></tr></table></figure>
+
+<p>与输入函数一样，putchar(c)等同于putc(c, stdout)，putc可被实现为宏，而fputc不能实现为宏。  </p>
+<h3 id="每次一行IO"><a href="#每次一行IO" class="headerlink" title="每次一行IO"></a>每次一行IO</h3><p>下面两个函数提供每次输入一行的功能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">fgets</span><span class="params">(<span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">int</span> n, FILE* <span class="keyword">restrict</span> fp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">gets</span><span class="params">(<span class="keyword">char</span>* buf)</span></span>;</span><br><span class="line"><span class="comment">/* 两个函数返回值：若成功，返回buf；若已到达文件尾端或出错，返回NULL */</span></span><br></pre></td></tr></table></figure>
+
+<p>这两个函数都制定了缓冲区地址，读入的行将送入其中。fgets从标准输入读，而fgets则从制定的流读。  </p>
+<p>对于fgets，必须制定缓冲的长度n。此函数一直读到下一个换行符为止，但是不超过n-1个字符，读入的字符被送入缓冲区。该缓冲区以null字节结尾。如若改行包括最后一个换行符的字符数超过n-1，则fgets只会返回一个不完整的行，但是，缓冲区总是以null结尾。对fgets的下一次调用会继续执行。  </p>
+<p>gets是一个不推荐使用的函数。其问题是调用者在使用gets时不能制定缓冲区的长度。gets与fgets的另一个区别是，gets并不将换行符存入缓冲区中。  </p>
+<p>fputs和puts提供每次输出一行的功能。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fputs</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> str, FILE* fp)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">puts</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* str)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>函数fputs将一个以null字节终止的字符写到指定的流，尾端的终止符null不写出。注意，这不一定是每次输出一行，因为字符串不需要换行符作为最后一个非null字节。通常，在null字节之前是一个换行符，但并不要求总是如此。  </p>
+<p>puts将一个以null字节终止的字符串写到标准输出，终止字符不写出。但是puts随后又将一个换行符写到标准输出。  </p>
+<p>puts并不像它所对应的gets那样不安全。但是我们还是应避免使用它，以免需要记住它在最后是否添加了一个换行符。如果总是使用fgets和fputs，那么就会数值在每行终止处我们必须自己处理换行符。  </p>
+<h3 id="二进制IO"><a href="#二进制IO" class="headerlink" title="二进制IO"></a>二进制IO</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">size_t</span> fread(<span class="keyword">void</span>* <span class="keyword">restrict</span> ptr, <span class="keyword">size_t</span> <span class="built_in">size</span>, <span class="keyword">size_t</span> nobj, FILE* <span class="keyword">restrict</span> fp);</span><br><span class="line"><span class="keyword">size_t</span> fwrite(<span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> ptr, <span class="keyword">size_t</span> <span class="built_in">size</span>, <span class="keyword">size_t</span> nobj, FILE* <span class="keyword">restrict</span> fp);</span><br><span class="line"><span class="comment">/* 两个函数的返回值：读或写的对象数 */</span></span><br></pre></td></tr></table></figure>
+
+<p>这些函数由以下两个常见的用法。</p>
+<ol>
+<li>读或写一个二进制数组。</li>
+<li>读或写一个结构。</li>
+</ol>
+<p>fread返回读或写的对象数。对于读，如果出错或到达文件尾端，则此数字可以少于nobj。在这种情况，应调用ferror或feof以判断究竟是哪一种情况。对于写，如果返回值小于所要求的nobj，则出错。  </p>
+<p>使用二进制IO的基本问题是，它只能用于读在同一系统上已写的数据。常常有这种情景，在一个系统上写数据，要在另一个系统上进行处理，在这种环境下，这两个函数可能就不能正常工作，其原因是是：  </p>
+<ol>
+<li>在一个结构中，统一成员的偏移量可能随编译程序和系统的不同而不同（由于不同的对齐要求）。</li>
+<li>用来存储多字节整数和浮点数的二进制格式在不同系统结构件也可能不同。</li>
+</ol>
+<h3 id="定位流"><a href="#定位流" class="headerlink" title="定位流"></a>定位流</h3><p>有3中方法定位标准IO流</p>
+<ol>
+<li>ftell和fseek函数。这两个函数自V7以来就存在了，但是他们都假定文件的位置可以存放在长整形中。</li>
+<li>ftello和fseeko函数。SUS引入了这两个函数，使文件偏移量可以不必一定使用长整形。他们使用off_t数据类型代替了长整形。</li>
+<li>fgetpos和fsetpos函数。这两个函数是由ISO C引入的。他们使用一个抽象数据类型fpos_t记录文件位置。这种数据类型可以根据需要定义为一个足够大的数，用以记录文件位置。</li>
+</ol>
+<p>需要移植到非UNIX系统上运行的应用程序应当使用fgetpos和fsetpos。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">ftell</span><span class="params">(FILE* fp)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回当前文件位置指示；若出错，返回-1L */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fseek</span><span class="params">(FILE* fp, <span class="keyword">long</span> offset, <span class="keyword">int</span> whence)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回0；若出错，返回-1 */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">rewind</span><span class="params">(FILE* fp)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>对于一个二进制文件，其文件位置指示器是从文件起始位置开始度量，并以字节为度量单位的。ftell用于二进制文件时，其返回值就是这种字节位置。为了用fseek定位一个二进制文件，必须制定一个字节offset，以及解释这种偏移量的方式whence的值与lseek函数的相同：SEEK_SET表示从文件的其实位置开始，SEEK_CUR表示从当前位置开始，SEEK_END表示从文件尾端开始。ISO C并不要求一个实现对二进制文件支持SEEK_END规格说明，其原因是某些系统要求二进制文件的长度是某个幻数的整数倍，结尾非实际内容部分则填充为0.但是在Unix系统中，对于二进制文件，则是支持SEEK_END的。  </p>
+<p>对于文本文件，他们的文件当前位置可能不以简单的字节偏移量来度量。这主要也是在unix系统中，他们可能以不同的格式放文本文件。为了定位一个文本文件,whence一定要是SEEK_SET，而且offset只能由两种值：0（后退到文件的起始位置），或是对该文件的ftell所返回的值。使用rewind函数也可以将一个流设置到文件的起始位置。  </p>
+<p>除了偏移量的类型是off_t而非long以外，ftello函数与ftell相同，fseeko函数与fseek相同。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">off_t</span> ftello(FILE* fp);</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回当前文件位置；若出错，返回(off_t)-1 */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fseeko</span><span class="params">(FILE* fp, <span class="keyword">off_t</span> offset, <span class="keyword">int</span> whence)</span></span>;</span><br><span class="line"><span class="comment">/* fanhuizhi：若成功，返回0；若失败，返回-1 */</span></span><br></pre></td></tr></table></figure>
+
+<p>可将off_t类型定义为长于32位。  </p>
+<p>fgetpos和fsetpos两个函数是ISO C标准引入。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fgetpos</span><span class="params">(FILE* <span class="keyword">restrict</span> fp, <span class="keyword">fpos_t</span> *<span class="keyword">restrict</span> pos)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fsetpos</span><span class="params">(FILE* fp, <span class="keyword">const</span> <span class="keyword">fpos_t</span> *pos)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>fgetpos将文件位置指示器的当前值存入由pos指向的对象中。在以后调用fsetpos时，可以使用此值将流重新定位至该位置。  </p>
+<h3 id="格式化IO"><a href="#格式化IO" class="headerlink" title="格式化IO"></a>格式化IO</h3><h4 id="1-格式化输出"><a href="#1-格式化输出" class="headerlink" title="1. 格式化输出"></a>1. 格式化输出</h4><p>格式化输出是由5个printf函数来处理的。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">printf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fprintf</span><span class="params">(FILE* <span class="keyword">restrict</span> fp, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dprintf</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, ...)</span></span>;</span><br><span class="line"><span class="comment">/* 3个函数返回值：若成功，返回输出字符数；若输出出错，返回负值 */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sprintf</span><span class="params">(<span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, ...)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回存入数组的字符数；若编码出错，返回负值 */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">snprintf</span><span class="params">(<span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">size_t</span> , <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, ...)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若缓冲区足够大，返回将要存入数组的字符数；若编码出错，返回负值 */</span></span><br></pre></td></tr></table></figure>
+
+<p>printf将格式化数据写到标准输出。fprintf写至指定的流，dprintf写至制定的文件描述符，sprintf将格式化的字符送入数组buf中。sprintf在数组的尾端自动加一个null字节，但该字符不包括在返回值中。  </p>
+<p>下列5种printf族的辩题类似于上面的5种，但是可变参数表（…）替换成了arg。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdarg.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">vprintf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> format, va_list arg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">vfprintf</span><span class="params">(FILE* <span class="keyword">restrict</span> fp, <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, va_list arg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">vdprintf</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, va_list arg)</span></span>;</span><br><span class="line"><span class="comment">/* 3个函数返回值：若成功，返回输出字符数；若输出出错，返回负值 */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">vsprintf</span><span class="params">(<span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, va_list arg)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回存入数组的字符数；若编码出错，返回负值 */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">vsnprintf</span><span class="params">(<span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">size_t</span> , <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, va_list arg)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若缓冲区足够大，返回将要存入数组的字符数；若编码出错，返回负值 */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-格式化输入"><a href="#2-格式化输入" class="headerlink" title="2. 格式化输入"></a>2. 格式化输入</h4><p>执行格式化输入处理的是3个scanf函数。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">scanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>× <span class="keyword">restrict</span> format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fscanf</span><span class="params">(FILE* <span class="keyword">restrict</span> fp, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sscanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, ...)</span></span>;</span><br><span class="line"><span class="comment">/* 3个函数返回值：赋值的输入项数；若输入出错或在任一转换前已到达文件尾端，返回EOF */</span></span><br></pre></td></tr></table></figure>
+
+<p>scanf族用于分析输入字符串，并将字符序列转换成指定类型的变量。在格式之后的各参数包含了变量的地址，用转换结果对这些变量赋值。  </p>
+<p>与printf族相同，scanf族也是用由&lt;stdarg.h&gt;说明的可变长度参数表。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdarg.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">vscanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>× <span class="keyword">restrict</span> format, va_list arg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">vfscanf</span><span class="params">(FILE* <span class="keyword">restrict</span> fp, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> format, va_list arg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">vsscanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, va_list arg)</span></span>;</span><br><span class="line"><span class="comment">/* 3个函数返回值：赋值的输入项数；若输入出错或在任一转换前已到达文件尾端，返回EOF */</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h3 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h3><p>如前所述，在Unix中，标准IO库最终要调用笔记1中说明的IO例程。每个标准IO流都有一个与其相关联的文件描述符，可对一个流调用fileno函数获得其描述符。</p>
+<blockquote>
+<p>注意，fileno不是ISO C标准部分，而是POSIX.1支持的扩展。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fileno</span><span class="params">(FILE* fp)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：与该流相关联的文件描述符 */</span></span><br></pre></td></tr></table></figure>
+
+<p>如果要调用dup或fcntl等函数，则需要此函数。  </p>
+<h3 id="临时文件"><a href="#临时文件" class="headerlink" title="临时文件"></a>临时文件</h3><p>ISO C标准IO库提供了两个函数以帮助创建临时文件。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">tmpnam</span><span class="params">(<span class="keyword">char</span>* ptr)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：指向唯一路径名的指针 */</span></span><br><span class="line"><span class="function">FILE* <span class="title">tmpfile</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回文件指针；若出错，返回NULL */</span></span><br></pre></td></tr></table></figure>
+
+<p>tmpname函数生成一个与现有文件名不同的一个有效路径名字字符串。每次调用它时，都产生一个不同的路径名，最多调用次数是TMP_MAX。TMP_MAX定义在&lt;stdio.h&gt;中。  </p>
+<p>若ptr是NULL，则所产生的路径名存放在一个静态区中，指向该静态区的指针作为函数值返回。后续调用tmpnam时，会重写该静态区（这意味着，如果我们调用此函数多次，而且想保存路径名，则我们应当保存该路径名的副本，而不知指针的副本）。ptr不是NULL，则认为它应该是指向长度至少是L_tmpnam个字符的数组（常量L_tmpnam定义在头文件&lt;stdio.h&gt;中）。所产生的路径名存放在该数组中。ptr作为函数值返回。  </p>
+<p>tmpfile创建一个临时位二进制文件（类型wb+），在关闭该文件或程序结束时将自动删除这种文件。注意，Unix对二进制文件不进行特殊区分。  </p>
+<p>tmpfile函数进程使用的标准Unix技术是先调用tmpnam产生一个唯一的路径名，然后，用该路径名创建一个文件，并立即unlink它。对一个文件解除链接并不删除其内容，关闭该文件时才删除其内容。而关闭文件可以使显式的，也可以在程序终止时自动进行。  </p>
+<p>SUS为处理临时文件定义了另外两个函数：mkdtemp和mkstemp，它们是XSI的扩展部分。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">mkdtemp</span><span class="params">(<span class="keyword">char</span> *<span class="keyword">template</span>)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回指向目录名的指针；若出错，返回NULL */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkstemp</span><span class="params">(<span class="keyword">char</span> *<span class="keyword">template</span>)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回文件描述符；若出错，返回-1 */</span></span><br></pre></td></tr></table></figure>
+
+<p>mkdtemp函数创建了一个目录，该目录有一个唯一的名字；mkstemp函数创建了一个文件，该文件由一个唯一的名字。名字是通过template字符串进行选择的。这个字符串是后6位设置为XXXXXX的路径名。函数将这些占位符替换成不同的字符串来构建成一个唯一的路径名。如果成功的话，这两个函数将修改template字符串反应临时文件的名字。  </p>
+<p>由mkdtemp函数创建的目录使用下列访问权限集：S_IRUSR|S_IWUSR|S_IXUSR。注意，调用进程的文件模式创建屏蔽字可以进一步限制这些权限。如果目录创建成功，mkdtemp返回新目录的名字。  </p>
+<p>mkstemp函数以唯一的名字创建一个普通文件并且打开该文件，该函数返回的文件名描述符以读写方式打开。由mkstemp创建的文件使用访问权限位S_IRUSR|S_IWUSR。  </p>
+<p>与tmpfile不同，mkstemp创建的临时文件并不会自动删除。如果希望从文件系统命名空间中删除该文件，必须自己对它解除链接。  </p>
+<p>  `</p>
+<h3 id="内存流"><a href="#内存流" class="headerlink" title="内存流"></a>内存流</h3><p>在SUSv4中支持了内存流。这就是标准IO流，随人仍使用FILE指针进行访问，但其实并没有底层文件。所有的IO都是通过在缓冲区与驻村之间来回传送字节来完成的。我们将看到，即便这些流看起来像文件流，它们的某些特征使其更适用于字符串操作。  </p>
+<p>有3个函数可用于内存流的创建，第一个是fmemopen函数。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">FILE* <span class="title">fmemopen</span><span class="params">(<span class="keyword">void</span>* <span class="keyword">restrict</span> buf, <span class="keyword">size_t</span> <span class="built_in">size</span>, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> type)</span></span>;</span><br><span class="line"><span class="comment">/* 返回值：若成功，返回流指针；若错误，返回NULL */</span></span><br></pre></td></tr></table></figure>
+
+<p>fmemopen函数允许调用者提供缓冲区用于内存流：buf参数指向内存区的开始位置，size参数指定了缓冲区大小的字节数。如果buf参数为空，fmemopen函数分配size字节数的缓冲区。在这种情况下，当流关闭时缓冲区会被释放。  </p>
+<p>用于创建内存流的其他两个函数分别是open_memstream和open_wmemstream。  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function">FILE* <span class="title">open_memstream</span><span class="params">(<span class="keyword">char</span>** bufp, <span class="keyword">size_t</span>* sizep)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;wchar.h&gt;</span></span></span><br><span class="line"><span class="function">FILE* <span class="title">open_wmemstream</span><span class="params">(<span class="keyword">wchar_t</span> **bufp, <span class="keyword">size_t</span>* sizep)</span></span>;</span><br><span class="line"><span class="comment">/* 两个函数的返回值：若成功，返回流指针；若出错，返回NULL */</span></span><br></pre></td></tr></table></figure>
+
+<p>open_memstream函数创建的流是面向字节的。open_wmemstream函数创建的流是面向款字节的。这两个函数与fmemopen函数的不同在于。  </p>
+<ul>
+<li>创建的流只能写打开；</li>
+<li>不能制定自己的缓冲区，但可以分别通过bufp和sizep参数访问缓冲区地址和大小；</li>
+<li>关闭流后需要自行释放缓冲区；</li>
+<li>对流添加字节会增加缓冲区大小。</li>
+</ul>
+<p>但是在缓冲区地址和大小的使用上必须遵循一些原则。第一，缓冲区地址和长度只有在调用fclose或fflush后才有效；第二，这些值只有在下一次流写入或调用fclose前才有效。因为缓冲区增长，可能需要重新分配。如果出现这种情况，我们会发现缓冲区的内存地址值在下一次调用fclose或fflush时会改变。  </p>
+<p>因为避免了缓冲区溢出，内存刘非常适合用于创建字符串。因为内存流只访问驻村，不访问磁盘上的文件，所以对于把标准IO流作为参数用于临时文件的函数来说，会有很大的性能提升。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/unix-%E6%A0%87%E5%87%86IO/" rel="tag"># unix 标准IO</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/29/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/" rel="next" title="unix环境高级编程：文件和目录">
+                  <i class="fa fa-chevron-left"></i> unix环境高级编程：文件和目录
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#流和FILE对象"><span class="nav-number">1.</span> <span class="nav-text">流和FILE对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标准输入、标准输出和标准错误"><span class="nav-number">2.</span> <span class="nav-text">标准输入、标准输出和标准错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓冲"><span class="nav-number">3.</span> <span class="nav-text">缓冲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打开流"><span class="nav-number">4.</span> <span class="nav-text">打开流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读和写流"><span class="nav-number">5.</span> <span class="nav-text">读和写流</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-输入函数"><span class="nav-number">5.1.</span> <span class="nav-text">1. 输入函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-输出函数"><span class="nav-number">5.2.</span> <span class="nav-text">2. 输出函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#每次一行IO"><span class="nav-number">6.</span> <span class="nav-text">每次一行IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二进制IO"><span class="nav-number">7.</span> <span class="nav-text">二进制IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定位流"><span class="nav-number">8.</span> <span class="nav-text">定位流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#格式化IO"><span class="nav-number">9.</span> <span class="nav-text">格式化IO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-格式化输出"><span class="nav-number">9.1.</span> <span class="nav-text">1. 格式化输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-格式化输入"><span class="nav-number">9.2.</span> <span class="nav-text">2. 格式化输入</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现细节"><span class="nav-number">10.</span> <span class="nav-text">实现细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#临时文件"><span class="nav-number">11.</span> <span class="nav-text">临时文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存流"><span class="nav-number">12.</span> <span class="nav-text">内存流</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">liuyun</p>
+  <div class="site-description" itemprop="description">blog of liuyun</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">liuyun</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
