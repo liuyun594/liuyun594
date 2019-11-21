@@ -46,13 +46,13 @@
   };
 </script>
 
-  <meta name="description" content="Unix环境高级编程笔记-1最近开始读Unix环境高级编程，第一、二章就先不记了，从第三章开始。 函数open和openat12345#include &amp;lt;fcntl.h&amp;gt;int open(const char *path, int oflag, ... &#x2F;* mode_t mode *&#x2F;);int openat(int fd, const char* path, int oflag,">
+  <meta name="description" content="Unix环境高级编程笔记-1最近开始读Unix环境高级编程，第一、二章就先不记了，从第三章开始。函数open和openat12345#include &amp;lt;fcntl.h&amp;gt;int open(const char *path, int oflag, ... &#x2F;* mode_t mode *&#x2F;);int openat(int fd, const char* path, int oflag, .">
 <meta name="keywords" content="unix环境高级编程 IO">
 <meta property="og:type" content="article">
 <meta property="og:title" content="unix环境高级编程：非缓冲IO">
 <meta property="og:url" content="liuyun594@github.io&#x2F;2019&#x2F;10&#x2F;28&#x2F;unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E9%9D%9E%E7%BC%93%E5%86%B2IO&#x2F;index.html">
 <meta property="og:site_name" content="liuyun&#39;s blog">
-<meta property="og:description" content="Unix环境高级编程笔记-1最近开始读Unix环境高级编程，第一、二章就先不记了，从第三章开始。 函数open和openat12345#include &amp;lt;fcntl.h&amp;gt;int open(const char *path, int oflag, ... &#x2F;* mode_t mode *&#x2F;);int openat(int fd, const char* path, int oflag,">
+<meta property="og:description" content="Unix环境高级编程笔记-1最近开始读Unix环境高级编程，第一、二章就先不记了，从第三章开始。函数open和openat12345#include &amp;lt;fcntl.h&amp;gt;int open(const char *path, int oflag, ... &#x2F;* mode_t mode *&#x2F;);int openat(int fd, const char* path, int oflag, .">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;mzgmzg.github.io&#x2F;images&#x2F;unix_programing&#x2F;fcnlt1.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;mzgmzg.github.io&#x2F;images&#x2F;unix_programing&#x2F;fcntl2.jpg">
@@ -222,8 +222,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="Unix环境高级编程笔记-1"><a href="#Unix环境高级编程笔记-1" class="headerlink" title="Unix环境高级编程笔记-1"></a>Unix环境高级编程笔记-1</h2><p>最近开始读Unix环境高级编程，第一、二章就先不记了，从第三章开始。</p>
-<h3 id="函数open和openat"><a href="#函数open和openat" class="headerlink" title="函数open和openat"></a>函数open和openat</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">int</span> oflag, ... <span class="comment">/* mode_t mode */</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">openat</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span>* path, <span class="keyword">int</span> oflag, ... <span class="comment">/* mode_t mode */</span>)</span></span>;</span><br><span class="line"><span class="comment">/* 两函数返回值：若成功，返回文件描述符；若出错，返回-1。 */</span></span><br></pre></td></tr></table></figure>
+        <h2 id="Unix环境高级编程笔记-1"><a href="#Unix环境高级编程笔记-1" class="headerlink" title="Unix环境高级编程笔记-1"></a>Unix环境高级编程笔记-1</h2><p>最近开始读Unix环境高级编程，第一、二章就先不记了，从第三章开始。</p><h3 id="函数open和openat"><a href="#函数open和openat" class="headerlink" title="函数open和openat"></a>函数open和openat</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">int</span> oflag, ... <span class="comment">/* mode_t mode */</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">openat</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span>* path, <span class="keyword">int</span> oflag, ... <span class="comment">/* mode_t mode */</span>)</span></span>;</span><br><span class="line"><span class="comment">/* 两函数返回值：若成功，返回文件描述符；若出错，返回-1。 */</span></span><br></pre></td></tr></table></figure><a id="more"></a>
+
 
 <pre><code>我们将最后一个参数为..., ISO C 用这种方法表明余下的参数的数量及其类型是可变的，对于`open`函数而言，仅当创建新文件时才使用最后这个参数。在函数原型中将此参数防止在注释中。  
 
