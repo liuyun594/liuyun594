@@ -47,14 +47,14 @@
 </script>
 
   <meta name="description" content="不仅是Unix，其他很多操作系统都实现了标准IO库。流和FILE对象对于ASCII字符集，一个字符用一个字节表示。对于国际字符集，一个字符可用多个字节表示。标准I&#x2F;O文件流可用于单字节或多字节（“宽”）字符集。流的定向(stream’s orientation)决定了所读、写的字符是单字节还是多字节的。当一个流最初被创建时，它并没有定向。如若在未定向的流上使用一个多字节IO函数（见&amp;lt;wcha">
-<meta name="keywords" content="unix 标准IO">
+<meta name="keywords" content="unix,笔记,标准IO">
 <meta property="og:type" content="article">
 <meta property="og:title" content="unix环境高级编程：标准IO库">
 <meta property="og:url" content="liuyun594@github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%A0%87%E5%87%86IO%E5%BA%93&#x2F;index.html">
 <meta property="og:site_name" content="liuyun&#39;s blog">
 <meta property="og:description" content="不仅是Unix，其他很多操作系统都实现了标准IO库。流和FILE对象对于ASCII字符集，一个字符用一个字节表示。对于国际字符集，一个字符可用多个字节表示。标准I&#x2F;O文件流可用于单字节或多字节（“宽”）字符集。流的定向(stream’s orientation)决定了所读、写的字符是单字节还是多字节的。当一个流最初被创建时，它并没有定向。如若在未定向的流上使用一个多字节IO函数（见&amp;lt;wcha">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-21T00:06:44.811Z">
+<meta property="og:updated_time" content="2019-11-21T05:14:21.363Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="liuyun594@github.io/2019/11/03/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%A0%87%E5%87%86IO%E5%BA%93/">
@@ -144,6 +144,11 @@
     <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
 
   </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
@@ -178,7 +183,7 @@
     <link itemprop="mainEntityOfPage" href="liuyun594@github.io/2019/11/03/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%A0%87%E5%87%86IO%E5%BA%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/image.jpg">
       <meta itemprop="name" content="liuyun">
       <meta itemprop="description" content="blog of liuyun">
     </span>
@@ -200,13 +205,17 @@
 
               <time title="创建时间：2019-11-03 08:05:20" itemprop="dateCreated datePublished" datetime="2019-11-03T08:05:20+08:00">2019-11-03</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-21 08:06:44" itemprop="dateModified" datetime="2019-11-21T08:06:44+08:00">2019-11-21</time>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
               </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">unix环境高级编程</span>
+                  </a>
+                </span>
+            </span>
 
           
 
@@ -546,7 +555,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/unix-%E6%A0%87%E5%87%86IO/" rel="tag"># unix 标准IO</a>
+              <a href="/tags/unix/" rel="tag"># unix</a>
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+              <a href="/tags/%E6%A0%87%E5%87%86IO/" rel="tag"># 标准IO</a>
           </div>
 
         
@@ -561,6 +572,9 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/05/Unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/" rel="prev" title="Unix环境高级编程：进程环境">
+                  Unix环境高级编程：进程环境 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -605,6 +619,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="liuyun"
+      src="/images/image.jpg">
   <p class="site-author-name" itemprop="name">liuyun</p>
   <div class="site-description" itemprop="description">blog of liuyun</div>
 </div>
@@ -613,13 +629,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
       <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
         <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -660,6 +684,7 @@
   <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
+
         
 
 
@@ -686,6 +711,7 @@
 <script src="/js/schemes/pisces.js"></script>
 <script src="/js/next-boot.js"></script>
 
+  <script defer src="/lib/three/three.min.js"></script>
 
 
   
@@ -709,5 +735,5 @@
 
   
 
-</body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"live2d-widget-model-miku"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
