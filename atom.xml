@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="liuyun594@github.io/"/>
-  <updated>2020-01-10T04:52:14.206Z</updated>
+  <updated>2020-01-11T06:11:15.089Z</updated>
   <id>liuyun594@github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>win10自带输入法打不出中文标点</title>
+    <link href="liuyun594@github.io/2020/01/11/win10%E8%87%AA%E5%B8%A6%E8%BE%93%E5%85%A5%E6%B3%95%E6%89%93%E4%B8%8D%E5%87%BA%E4%B8%AD%E6%96%87%E6%A0%87%E7%82%B9/"/>
+    <id>liuyun594@github.io/2020/01/11/win10%E8%87%AA%E5%B8%A6%E8%BE%93%E5%85%A5%E6%B3%95%E6%89%93%E4%B8%8D%E5%87%BA%E4%B8%AD%E6%96%87%E6%A0%87%E7%82%B9/</id>
+    <published>2020-01-11T06:08:58.746Z</published>
+    <updated>2020-01-11T06:11:15.089Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>一直用的是win10自带的输入法，在一次写博客时输入法打不出来中文的标点符号了，后面才发现问题所在，这里说一下问题发生的两种可能情况。</p><a id="more"></a><h3 id="情况一"><a href="#情况一" class="headerlink" title="情况一"></a>情况一</h3><p>打开了“中文输入时使用英文标点”。关掉即可。</p><p>右击输入法小图标→设置→常规→关闭“中文输入时使用英文标点”</p><p><img src="/images/%E8%BE%93%E5%85%A5%E6%B3%95_case1.jpg" alt="关闭“中文输入时使用英文标点”"></p><h3 id="情况二"><a href="#情况二" class="headerlink" title="情况二"></a>情况二</h3><p>不小心按到了<code>ctrl+.</code>，切换到了英文标点，再按一次<code>ctrl+.</code>即可。</p><p><img src="/images/%E8%BE%93%E5%85%A5%E6%B3%95_case2.jpg" alt="切换到了英文标点"></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;一直用的是win10自带的输入法，在一次写博客时输入法打不出来中文的标点符号了，后面才发现问题所在，这里说一下问题发生的两种可能情况。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="小技巧" scheme="liuyun594@github.io/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
+    
+    
+      <category term="原创" scheme="liuyun594@github.io/tags/%E5%8E%9F%E5%88%9B/"/>
+    
+      <category term="小技巧" scheme="liuyun594@github.io/tags/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
+    
+      <category term="输入法" scheme="liuyun594@github.io/tags/%E8%BE%93%E5%85%A5%E6%B3%95/"/>
+    
+  </entry>
   
   <entry>
     <title>C++模板代码组织方式</title>
