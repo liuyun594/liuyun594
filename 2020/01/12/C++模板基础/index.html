@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="liuyun's blog" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="前言一些关于模板的零碎知识，容易被忽略的知识，来源是《C++ templates》第8章。">
+<meta name="keywords" content="C++,template">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++模板基础">
+<meta property="og:url" content="liuyun594@github.io&#x2F;2020&#x2F;01&#x2F;12&#x2F;C++%E6%A8%A1%E6%9D%BF%E5%9F%BA%E7%A1%80&#x2F;index.html">
+<meta property="og:site_name" content="liuyun&#39;s blog">
+<meta property="og:description" content="前言一些关于模板的零碎知识，容易被忽略的知识，来源是《C++ templates》第8章。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-12T14:28:32.235Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="liuyun594@github.io/2020/01/12/C++%E6%A8%A1%E6%9D%BF%E5%9F%BA%E7%A1%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>C++模板基础 | liuyun's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">liuyun's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="liuyun594@github.io/2020/01/12/C++%E6%A8%A1%E6%9D%BF%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/image.jpg">
+      <meta itemprop="name" content="liuyun">
+      <meta itemprop="description" content="blog of liuyun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="liuyun's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++模板基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-12 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-12T00:00:00+08:00">2020-01-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>一些关于模板的零碎知识，容易被忽略的知识，来源是《C++ templates》第8章。</p>
+<a id="more"></a>
+
+<h3 id="参数化声明"><a href="#参数化声明" class="headerlink" title="参数化声明"></a>参数化声明</h3><p>C++现今支持两种基本类型的模板：类模板和函数模板，这个分类实际上还包括成员模板。这些模板的声明和普通类与普通函数的声明很相似，唯一的区别是模板声明需要引入一个参数化字句，字句的格式大体如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//export为可选的</span></span><br><span class="line">[<span class="keyword">export</span>] <span class="keyword">template</span>&lt;...parameters here...&gt;</span><br></pre></td></tr></table></figure>
+
+<p>另外，如果要有多个字句（例如类模板中包含有成员模板），字句的顺序是从最外围的类模板开始，依次到达内部模板。</p>
+<p>此外，联合(Union)模板也是允许的。</p>
+<h4 id="1-虚成员函数"><a href="#1-虚成员函数" class="headerlink" title="1. 虚成员函数"></a>1. 虚成员函数</h4><p>成员函数模板<strong>不能</strong>被声明成为虚函数。因为函数模板实例化个数不定，而虚函数的实现一般是一个确定大小的表。</p>
+<h4 id="2-模板的链接"><a href="#2-模板的链接" class="headerlink" title="2. 模板的链接"></a>2. 模板的链接</h4><p>每个模板都必须有一个名字，而且在它所属的作用域下，改名字是唯一的；除非函数模板可以被重载。特别是，类模板不能和另外一个实体共享一个名字，这一点和class类型是不同的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> C;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span>;</span>	<span class="comment">//正确：类名称和非类名称位于不同的名字空间（space）</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> X;</span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span>;</span>	<span class="comment">//错误：和变量X冲突</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">S</span>;</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">S</span>;</span>	<span class="comment">//错误：和struct S冲突</span></span><br></pre></td></tr></table></figure>
+
+<p>模板名字是具有链接的，但他们不能具有C链接。但我们在大多数情况下所说的是标准的链接，同时也存在非标准的链接，它们可以具有一个依赖于实现的函数。见下面例子所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="string">"C++"</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">normal</span><span class="params">()</span></span>;		<span class="comment">//这是缺省情况，上面的链接规范可以不写</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">invalid</span><span class="params">()</span></span>;		<span class="comment">//错误的：模板不能具有C链接</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"Xroma"</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">xroma_link</span><span class="params">()</span></span>;	<span class="comment">//非标准的，但某些编译器将来可能支持</span></span><br><span class="line">					<span class="comment">//Xroma语言的链接兼容性</span></span><br></pre></td></tr></table></figure>
+
+<p>模板通常具有外部链接。唯一的例外就是前面具有static修饰符的名字空间作用域下的函数模板：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">external</span><span class="params">()</span></span>;		<span class="comment">//作为一个声明，引用位于其他文件的，具有相同名称的实体：</span></span><br><span class="line">						<span class="comment">//即引用位于其他文件的external()函数模板，也称前置声明</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">A</span><span class="params">()</span></span>;		<span class="comment">//与其他文件中具有相同名称的模板没有关系，即不是外部链接</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-基本模板"><a href="#3-基本模板" class="headerlink" title="3. 基本模板"></a>3. 基本模板</h4><p>如果模板声明的是一个普通声明，我们就称它声明的是一个基本模板。这类模板声明是指：没有在模板名称后面添加一对尖括号（和里面实参）的声明。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="class"><span class="keyword">class</span> <span class="title">Box</span>;</span>	<span class="comment">//正确，基本模板</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;T&gt;;</span>	<span class="comment">//错误</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function"><span class="keyword">void</span> <span class="title">translate</span><span class="params">(T*)</span></span>;	<span class="comment">//正确：基本模板</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">void</span> translate&lt;T&gt;(T*);	<span class="comment">//错误</span></span><br></pre></td></tr></table></figure>
+
+<p>声明局部特化的时候，声明的就是非基本模板．</p>
+</br>
+
+<h3 id="模板参数"><a href="#模板参数" class="headerlink" title="模板参数"></a>模板参数</h3><p>现今存在3中模板参数:</p>
+<ol>
+<li>类型参数</li>
+<li>非类型参数</li>
+<li>模板的模板参数</li>
+</ol>
+<h4 id="1-类型参数"><a href="#1-类型参数" class="headerlink" title="1. 类型参数"></a>1. 类型参数</h4><p>类型参数是通过关键字typename或者class引入的: 他们两个几乎是等同的.关键字后面必须是一个简单的标识符, 后面用逗号隔开下一个参数声明. 等号( == )代表接下来的是缺省实参, 一个封闭的尖括号  ( &gt; )表示参数化字句的结束.</p>
+<p>在模板声明内部, 类型参数的作用类似于typedef名称. 例如, 如果T是一个模板参数, 就不能使用诸如class T等形式的修饰名称, 即使T是一个class类型替换的参数也不行.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Allocator&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">List</span>&#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Allocator</span>* <span class="title">allocator</span>;</span>		<span class="comment">//错误</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="class"><span class="keyword">class</span> <span class="title">Allocator</span>;</span>			<span class="comment">//错误</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-非类型参数"><a href="#2-非类型参数" class="headerlink" title="2. 非类型参数"></a>2. 非类型参数</h4><p>非类型参数表示的是: 在编译期或链接期可以确定的常值.这种参数的类型必须是下面的一种:</p>
+<ul>
+<li>整型或者枚举类型</li>
+<li>指针类型( 包含普通对象的指针类型、函数指针类型、指向成员的指针类型 )</li>
+<li>引用类型（指向对象或者指向函数的引用都是允许的）</li>
+</ul>
+<p>函数和数组类型也可以被指定为非模板参数，但要把他们先隐式转换为指针类型，这种类型转换也成为decay：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span> buf[<span class="number">5</span>]&gt; <span class="class"><span class="keyword">class</span> <span class="title">Lexer</span>;</span>	<span class="comment">//buf实际上是一个int*类型</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span>* buf&gt; <span class="class"><span class="keyword">class</span> <span class="title">Lexer</span>;</span>	<span class="comment">//正确：这是上面的重新声明。</span></span><br></pre></td></tr></table></figure>
+
+<p>非类型模板参数的声明和变量的声明很相似，但他们不能具有static、mutable等修饰符：只能具有const和volatile限定符。但如果这两个限定符限定的如果是最外层的参数类型，编译器会将他们忽略：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span> <span class="keyword">const</span> length&gt; <span class="class"><span class="keyword">class</span> <span class="title">Buffer</span>;</span>	<span class="comment">//这里的const是没用的，被忽略了</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span> length&gt; <span class="class"><span class="keyword">class</span> <span class="title">Buffer</span>;</span>		<span class="comment">//和上面是等同的</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-模板的模板参数"><a href="#3-模板的模板参数" class="headerlink" title="3. 模板的模板参数"></a>3. 模板的模板参数</h4><p>模板的模板参数是代表类模板的占位符。它的声明和类模板的声明很类似，但不能使用关键字struct和union：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> X&gt; <span class="class"><span class="keyword">class</span> <span class="title">C</span>&gt;		//正确</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">f</span>(<span class="title">C</span>&lt;int&gt;* <span class="title">p</span>);</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> X&gt; <span class="class"><span class="keyword">struct</span> <span class="title">C</span>&gt;	//错误</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">f</span>(<span class="title">C</span>&lt;int&gt;* <span class="title">p</span>);</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> X&gt; <span class="keyword">union</span> C&gt;	<span class="comment">//错误</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(C&lt;<span class="keyword">int</span>&gt;* p)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>模板的模板参数的参数（如下面的A）可以具有缺省模板实参。显然，只有在调用时没有指定改参数的情况下，才会应用缺省模板实参：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T,</span><br><span class="line">		<span class="keyword">typename</span> A = MyAllocator&gt; class Container&gt;</span><br><span class="line">class Adaptation&#123;</span><br><span class="line">	Container&lt;<span class="keyword">int</span>&gt; storage;<span class="comment">//隐式等同于Container&lt;int, MyAllocator&gt;</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>对于模板的模板参数而言，它的参数名称只能被自身其他参数的声明使用。下面的假设例子说明了这一点：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, T*&gt; <span class="class"><span class="keyword">class</span> <span class="title">Buf</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">Lexer</span>&#123;</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">char</span> storage[<span class="number">5</span>];</span><br><span class="line">    Buf&lt;<span class="keyword">char</span>, &amp;Lexer&lt;Buf&gt;::storage[<span class="number">0</span>]&gt; buf;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="class"><span class="keyword">class</span> <span class="title">Buf</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">Lexer</span>&#123;</span></span><br><span class="line">    <span class="keyword">static</span> T* storage;	<span class="comment">//错误：模板的模板参数在这里不能被使用</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>通常而言，模板的模板参数的参数名称（如上面例子的T）并不会在后面被用到。因此，该参数也经常被省略不写，即没有命名。例如，前面Adaptation模板的例子可以这样声明：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>, <span class="keyword">typename</span> = MyAllocator&gt; class Container&gt;</span><br><span class="line">class Adaptation</span><br><span class="line">&#123;</span><br><span class="line">    Container&lt;<span class="keyword">int</span>&gt; storage;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-缺省模板实参"><a href="#4-缺省模板实参" class="headerlink" title="4. 缺省模板实参"></a>4. 缺省模板实参</h4><p>现今只有模板声明才能具有缺省模板实参。任何类型的模板参数都可以同游一个缺省实参，只要该实参能够匹配这个参数就可以。显然，缺省实参不能依赖于自身的参数；但亦可依赖于前面的参数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Allocator = allocator&lt;T&gt;&gt;</span><br><span class="line">class List;</span><br><span class="line"><span class="comment">//就是说，allocator&lt;T&gt;不能依赖于本身参数Allocator，但是能依赖于前面参数T</span></span><br></pre></td></tr></table></figure>
+
+<p>与缺省的函数调用参数的约束一样，对于任一个模板参数，只有在之后的模板参数都提供了缺省实参的前提下，才能具有缺省模板实参，后面的缺省值通常是在某个模板声明中提供的，但也可以在前面的模板声明中提供。下面的例子说明了这一点：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2, <span class="keyword">typename</span> T3,</span><br><span class="line">		<span class="keyword">typename</span> T4 = <span class="keyword">char</span>, <span class="keyword">typename</span> T5 = <span class="keyword">char</span>&gt;</span><br><span class="line">class Quintuple;	<span class="comment">//正确</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2, <span class="keyword">typename</span> T3 = <span class="keyword">char</span>, </span><br><span class="line">	<span class="keyword">typename</span> T4, <span class="keyword">typename</span> T5&gt;</span><br><span class="line">class Quintuple;	<span class="comment">//正确，根据前面的模板声明，T4和T5已经具有缺省值了</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T1 = <span class="keyword">char</span>, <span class="keyword">typename</span> T2, <span class="keyword">typename</span> T3, </span><br><span class="line">	<span class="keyword">typename</span> T4, <span class="keyword">typename</span> T5&gt;</span><br><span class="line">class Quintuple;	<span class="comment">//错误，T1不能具有缺省实参，因为T2还没有缺省实参</span></span><br></pre></td></tr></table></figure>
+
+<p>另外，缺省实参不能重复声明：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T = <span class="keyword">void</span>&gt;</span><br><span class="line">class Value;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T = <span class="keyword">void</span>&gt;</span><br><span class="line">class Value;	<span class="comment">//错误：重复出现缺省实参</span></span><br></pre></td></tr></table></figure>
+
+</br>
+
+<h3 id="模板实参"><a href="#模板实参" class="headerlink" title="模板实参"></a>模板实参</h3><p>模板实参是指：在实例化模板时，用来替换模板参数的值。我们可以使用下面几种不同的机制来确定这些值：</p>
+<ul>
+<li>显式模板实参：紧跟在模板名称后面，在一对尖括号内部的显式模板实参值。所组成的整个实体称为template-id。</li>
+<li>注入式（injected）类名称：对于具有模板参数P1、P2……的类模板X，在它的作用域中，模板名称（即X）等同于template-id：X&lt;P1, P2, ……&gt;。</li>
+<li>缺省模板实参：如果提供缺省模板实参的话，在类模板的实例中就可以省略显式模板实参。然而，即使所有的模板参数都具有缺省值，一对尖括号还是不能省略的（即使尖括号内部为空，也要保留尖括号）。</li>
+<li>实参演绎，对于不是显式指定的函数模板实参，可以在函数的调用语句中，根据函数调用实参的类型来演绎出函数模板实参。事实上，实参演绎还可以在其他几种情况下出现。另外，如果所有的模板实参都可以通过演绎获得，那么在函数模板名称后面就不需要指定尖括号。</li>
+</ul>
+<h4 id="1-函数模板实参"><a href="#1-函数模板实参" class="headerlink" title="1. 函数模板实参"></a>1. 函数模板实参</h4><p>对于函数模板的模板实参，我们可以显式指定他们，或者借助于模板的使用方式对他们进行实参演绎。然而，某些模板实参永远也得不到演绎的机会，于是，我们最好把这些实参所对应的参数放在模板参数列表的开始处，从而可以显式指定这些参数，而其他的参数仍然可以进行实参演绎。例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> DstT, <span class="keyword">typename</span> SrcT&gt;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> DstT <span class="title">implicit_cast</span><span class="params">(SrcT <span class="keyword">const</span>&amp; x)</span></span></span><br><span class="line"><span class="function"></span>&#123;				<span class="comment">//SrcT可以被演绎，但是DstT不可以</span></span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">max</span>&lt;<span class="keyword">double</span>&gt;(<span class="number">1.0</span>, <span class="number">-3.0</span>);	<span class="comment">//显式指定模板实参</span></span><br><span class="line">    <span class="built_in">max</span>(<span class="number">1.0</span>, <span class="number">-3.0</span>);			<span class="comment">//模板实参被隐式演绎成double</span></span><br><span class="line">    <span class="built_in">max</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">1.0</span>, <span class="number">3.0</span>);		<span class="comment">//显式的&lt;int&gt;禁止了演绎，因此返回结果时int类型</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于函数模板可以被重载，所以对于函数模板而言，显式提供所有的实参并不足以标识每一个函数：在一些例子中，它标识的是由许多函数组成的函数集合。下面的例子清楚地说明了这一点：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Func, <span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">apply</span><span class="params">(Func func_ptr, T t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    func_ptr(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function"><span class="keyword">void</span> <span class="title">single</span><span class="params">(T)</span></span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function"><span class="keyword">void</span> <span class="title">multi</span><span class="params">(T)</span></span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function"><span class="keyword">void</span> <span class="title">multi</span><span class="params">(T*)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    apply(&amp;single&lt;<span class="keyword">int</span>&gt;, <span class="number">1</span>);		<span class="comment">//正确</span></span><br><span class="line">    apply(&amp;multi&lt;<span class="keyword">int</span>&gt;, <span class="number">1</span>);		<span class="comment">//错误：&amp;multi&lt;int&gt;不唯一</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，apply()的第一次调用时正确的，因为表达式&amp;singal&lt;int&gt;的类型时正确的，因此，可以很容易地演绎出Func参数地模板实参值。然而，在第2此调用中，&amp;multi&lt;int&gt;可以是两种函数类型中的任意一种，因此，在这种情况下会产生二义性，不能演绎出Func地实参。</p>
+<p>另外，在函数模板中，显式指定模板实参可能会试图构造一个无效的C++类型。考虑下面地重载模板函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function">RT1 <span class="title">test</span><span class="params">(<span class="keyword">typename</span> T::X <span class="keyword">const</span>*)</span></span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function">RT2 <span class="title">test</span><span class="params">(...)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>表达式test&lt;int&gt;可能会使第一个函数模板毫无意义，因为基本int类型根被就没有成员类型X。然而，第二个模板就没有这种问题。因此，表达式&amp;test&lt;int&gt;能够标识一个唯一函数地地址（即第二个函数的地址）。而且，不能用int来替换第一个模板的参数，并不意味着&amp;test&lt;int&gt;使非法的（就是下面的SFINAE原则）。实际上&amp;test&lt;int&gt;在这里是有效的，也是合法的。</p>
+<p>显然，<strong>“替换失败并非错误（subsitution-failure-is-not-an-error，SFINAE）”</strong>原则是令函数模板可以重载的重要因素。然而，它同时也涉及到值得我们注意的编译期技术。例如，假设类型RT1和RT2的定义如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span> RT1;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span> <span class="keyword">char</span> a[<span class="number">2</span>]; &#125; RT2;</span><br></pre></td></tr></table></figure>
+
+<p>于是，我们就可以在编译器奸杀（也就是说，检查是否可以把它看成一个constant-expression）给定类型T是否具备成员类型X：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> type_has_member_type_X(T) (sizeof(test<span class="meta-string">&lt;T&gt;(0)) == 1)</span></span></span><br></pre></td></tr></table></figure>
+
+<p><strong>SFINAE原则保护的只是：允许试图创建无效的类型。但并不允许试图计算无效的表达式。</strong>因此，下面的例子是错误的C++例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span> I&gt; <span class="function">viud <span class="title">f</span><span class="params">(<span class="keyword">int</span> (&amp;)[<span class="number">24</span>/(<span class="number">4</span>-I)])</span></span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span> I&gt; <span class="function">viud <span class="title">f</span><span class="params">(<span class="keyword">int</span> (&amp;)[<span class="number">24</span>/(<span class="number">4</span>+I)])</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    &amp;f&lt;<span class="number">4</span>&gt;;	<span class="comment">//错误：替换后第一个除数等于0（不能应用SFINAE）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>即使第2个模板支持这种替换，它的除数也不会为0，但是这个例子是错误的。而且，这种错误指挥在表达式自身体现，并不会在模板参数表达式的绑定中体现。因此，下面的例子是合法的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span> N&gt;<span class="function"><span class="keyword">int</span> <span class="title">g</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> N; &#125;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span>* p&gt; <span class="function"><span class="keyword">int</span> <span class="title">g</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> *P;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> g&lt;<span class="number">1</span>&gt;();	<span class="comment">//虽然数字1不能被绑定到int* 参数，但是应用了SFINAE原则</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-类型实参"><a href="#2-类型实参" class="headerlink" title="2. 类型实参"></a>2. 类型实参</h4><p>模板的类型实参是一些用来指定模板类型参数的值。我们平时使用的大多数类型都可以被用作模板的类型实参，但有两种情况除外：</p>
+<ol>
+<li>局部类和局部枚举（换句话说，指在函数定义内部声明的类型）不能作为模板的类型实参。</li>
+<li>未命名的class类型或者未命名的枚举类型不能作为模板的类型实参（然而，通过typedef声明给出的未命名类和枚举是可以作为模板类型实参的）。</li>
+</ol>
+<h4 id="3-非类型实参"><a href="#3-非类型实参" class="headerlink" title="3. 非类型实参"></a>3. 非类型实参</h4><p>非类型模板实参是那些替换非类型参数的值。这个值必须是以下几种中的一种：</p>
+<ul>
+<li>某一个具有正确类型的非类型模板参数</li>
+<li>一个编译器整型常值（或枚举值）。这只有在参数类型和值的类型能够进行匹配，或者值的类型可以隐式地转换为参数类型（例如，一个char值可以作为int参数地实参）的前提下，才是合法的。</li>
+<li>前面有单目运算符&amp;（即取址）的外部变量或者函数的名称。对于函数或数组变量，&amp;运算符可以省略。这类模板实参可以匹配指针类型的非类型参数。</li>
+<li>对于引用类型的非类型模板参数，前面没有&amp;运算符的外部变量和外部函数也是可取的。</li>
+<li>一个直线成员的指针常量。换句话说，类似&amp;C::m的表达式，其中C是一个class类型，m是一个非静态成员（成员变量或者函数）。这类实参只能匹配类型为”成员指针“的非类型参数。</li>
+</ul>
+<p>当实参匹配”指针类型或者引用类型的参数“时，用户定义的类型转换（例如单参数的构造函数和重载类型转换运算符）和由派生类到积累的类型转换，都是不会被考虑的，即使在其他情况下，这些隐式类型转换是有效的，但在这里都是无效的。隐式类型转换的唯一应用只是：给实参加上关键字const或者volatile。</p>
+<p>下面是一些有效的非类型模板实参地例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, T nontype_param&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span>;</span></span><br><span class="line"></span><br><span class="line">C&lt;<span class="keyword">int</span>, <span class="number">33</span>&gt;* c1;	<span class="comment">//整型</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a;</span><br><span class="line">C&lt;<span class="keyword">int</span>*, &amp;a&gt;* c2;	<span class="comment">//外部变量地址</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line">C&lt;<span class="keyword">void</span> (*)(<span class="keyword">int</span>), f&gt;* c3;	<span class="comment">//函数名称：在这个例子中，重载解析会选择f(int)</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">bool</span> b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">C&lt;<span class="keyword">bool</span>&amp;, X::b&gt;* c4;	<span class="comment">//静态类成员是可取地。变量（和函数）名称</span></span><br><span class="line"></span><br><span class="line">C&lt;<span class="keyword">int</span> X::*, &amp;X::n&gt;* c5;	<span class="comment">//指向成员地指针常量</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">temp_func</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">C&lt;<span class="keyword">void</span> (), &amp;temp_func&lt;<span class="keyword">double</span>&gt;&gt;* c6;	<span class="comment">//函数模板实例同时也是函数</span></span><br></pre></td></tr></table></figure>
+
+<p>模板实参地一个普遍约束是：在程序创建地时候，编译器或者链接器要能够确定实参地值。如果实参的值要等到程序运行时才能确定（譬如，局部变量的地址），就不符合”模板是在程序创建的时候进行实例化“的概念了。</p>
+<p>另一方面，有些常量不能作为有效的非类型实参，这也许会令你觉得差异，这些常量值包括：</p>
+<ul>
+<li>空指针常量</li>
+<li>浮点型值</li>
+<li>字符串</li>
+</ul>
+<p>有关字符串的一个问题就是：两个完全等同的字符串可以存储在两个不同的地址中。在此，我们用一种（很笨的）解决方法来表达需要基于字符串进行实例化的模板：引入一个额外的变量来存储这个字符串。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">char</span> <span class="keyword">const</span>* str&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Message</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> <span class="keyword">const</span> hello[] = <span class="string">"hello world!"</span>;</span><br><span class="line"></span><br><span class="line">Message&lt;hello&gt; *hello_msg;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，我们使用了关键字extern。因为如果不适用这个关键字，上面的const数组变量将具有内部链接。</p>
+<p>下面给出一些错误例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, T nontype_param&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">&#125;base;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derived</span>:</span> <span class="keyword">public</span> Base&#123;</span><br><span class="line">&#125;derived_obj;</span><br><span class="line"></span><br><span class="line">C&lt;Base*, &amp;derived_obj&gt;* err1;	<span class="comment">//错误，这里不会考虑派生类到基类的类型转换</span></span><br><span class="line"></span><br><span class="line">C&lt;<span class="keyword">int</span>&amp;, base.i&gt;* err2;		<span class="comment">//错误：域运算符（.）后面的变量不会被看成变量</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>];</span><br><span class="line">C&lt;<span class="keyword">int</span>*, &amp;a[<span class="number">0</span>]&gt;* err;	<span class="comment">//错误：不能使用数组某一元素的地址</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-模板的模板实参"><a href="#4-模板的模板实参" class="headerlink" title="4. 模板的模板实参"></a>4. 模板的模板实参</h4><p>”模板的模板实参“必须是一个类模板，它本身具有参数，<strong>该参数必须精确匹配它“所替换的模板的模板参数”本身的参数</strong>。在匹配过程中，”模板的模板实参“的缺省模板实参将不会被考虑（但是如果”模板的模板参数“具有缺省实参，那么模板的实例化过程时会考虑模板的模板参数的缺省实参的）。</p>
+<p>从语法上讲，只有关键字class才能被用来声明模板的模板参数；但是这并不意味只有用关键字class声明的类模板才能作为它的替换实参。</p>
+<h4 id="5-实参的等价性"><a href="#5-实参的等价性" class="headerlink" title="5. 实参的等价性"></a>5. 实参的等价性</h4><p>当每个对应实参值都相等时，我们就称这两组模板实参时相等的。对于类型实参，typedef名称并不会对等价性产生影响：就是说，最后比较的还是typedef原本的类型。对于非类型的整型实参，进行比较的时实参的值；至于这些值时如何表达的，也不会产生影响，下面的例子说明了这一点：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">int</span> I&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mix</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Int;</span><br><span class="line"></span><br><span class="line">Mix&lt;<span class="keyword">int</span>, <span class="number">3</span>*<span class="number">3</span>&gt;* p1;</span><br><span class="line">Mix&lt;Int, <span class="number">4</span>+<span class="number">5</span>&gt;* p2;	<span class="comment">//p2和p1的类型时相同的</span></span><br></pre></td></tr></table></figure>
+
+<p>另外，从函数模板产生（即实例化出来的）函数一定不会等于普通函数，即使这两个函数具有相同的类型和名称。这样，针对类成员，我们可以引申出两点结论：</p>
+<ul>
+<li>从成员函数模板产生的类永远也不会改写一个虚函数（进一步说明成员函数模板不能是一个虚函数）。</li>
+<li>从构造函数模板产生的构造函数一定不会是缺省的拷贝构造函数。</li>
+</ul>
+</br>
+
+<h3 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h3><p>友元声明的基本概念时简单的：授予”某个类或者函数访问友元声明所在的类“的权利。然而，由于以下两个事实，这些简单概念却变得有些复杂：</p>
+<ol>
+<li>友元声明可能是某个实体的唯一声明。</li>
+<li>友元函数的声明可以是一个定义。</li>
+</ol>
+<p>友元类的声明不能是类定义，因此友元类通常都不会出现问题。在引入模板之后，友元类声明的唯一变化只是：可以命名一个特定的类模板实例为友元。</p>
+<p>显然，<strong>如果要把类模板的实例声明为其他类（或者类模板）的友元，该类模板在声明的地方必须是可见的。然而，对于一个普通类，就没有这个要求</strong>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tree</span>&#123;</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory</span>;</span>	<span class="comment">//OK，即使这是Factory的首次声明</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;T&gt;;</span>	<span class="comment">//ERROR（如果此前从未声明过Node）</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-友元函数"><a href="#1-友元函数" class="headerlink" title="1. 友元函数"></a>1. 友元函数</h4><p><strong>通过确认紧接在友元函数名称后面的是一对尖括号，我们可以把函数模板的实例声明为友元。</strong>尖括号可以包含模板实参，但也可以通过调用参数来演绎出实参。<strong>如果全部实参都能获得演绎的话，那么尖括号里面可以为空</strong>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">combine</span><span class="params">(T1, T2)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mixer</span>&#123;</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">void</span> combine&lt;&gt;(<span class="keyword">int</span>&amp;, <span class="keyword">int</span>&amp;);</span><br><span class="line">    	<span class="comment">//正确</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">void</span> combine&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;(<span class="keyword">int</span>, <span class="keyword">int</span>);</span><br><span class="line">    	<span class="comment">//正确</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">void</span> combine&lt;<span class="keyword">char</span>&gt;(<span class="keyword">char</span>, <span class="keyword">int</span>);</span><br><span class="line">    	<span class="comment">//正确</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">void</span> combine&lt;<span class="keyword">char</span>&gt;(<span class="keyword">char</span>&amp; <span class="keyword">int</span>);</span><br><span class="line">    	<span class="comment">//错误</span></span><br><span class="line">    frined <span class="keyword">void</span> combine&lt;&gt;(<span class="keyword">long</span>, <span class="keyword">long</span>) &#123;  ...  &#125;</span><br><span class="line">    	<span class="comment">//错误，这里的友元声明不允许出现定义</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>不能在友元声明中定义一个模板实例（我们最多只能定义一个特化）</strong>；因此，命名一个实例的友元声明是不能作为定义的。</p>
+<p>如果名称 后面没有紧跟一堆尖括号，那么只有在下面两种请胯下是合法的：</p>
+<ol>
+<li>如果名称<strong>不是</strong>受限的（就是说，没有包含一个形如双冒号的域运算符），那么该名称一定<strong>不是</strong>（也不能）引用一个模板实例。如果在友元声明的地方，还看不多所普配的非模板函数，那么这个友元声明就是函数的首次声明。于是，<strong>该声明可以是定义</strong>。</li>
+<li>如果名称是<strong>受限的</strong>（就是说前面有双冒号），那么该名称必须引用一个<strong>在此之前声明的函数或者函数模板</strong>。在匹配过程中，<strong>匹配的函数要优先于匹配的函数模板</strong>。然而，这样的<strong>友元声明不能是定义</strong>。</li>
+</ol>
+<p>下面的例子可以说明这些情况：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">miltiply</span><span class="params">(<span class="keyword">void</span>*)</span></span>;	<span class="comment">//普通函数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">multiply</span><span class="params">(T)</span></span>;		<span class="comment">//函数模板</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Comrades</span>&#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">friend</span> <span class="keyword">void</span> <span class="title">multiply</span><span class="params">(<span class="keyword">int</span>)</span> </span>&#123;  &#125;</span><br><span class="line">    		<span class="comment">//定义了一个新的函数::multiply(int)非受限函数名称，不能引用模板实例</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">void</span> ::multiply(<span class="keyword">void</span>*);</span><br><span class="line">        	<span class="comment">//引用上面的普通函数，不会引用multiply&lt;void*&gt;实例</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">void</span> ::multiply(<span class="keyword">int</span>);</span><br><span class="line">    		<span class="comment">//引用一个模板实例</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">void</span> ::multiply&lt;<span class="keyword">double</span>*&gt;(<span class="keyword">double</span>*);</span><br><span class="line">        	<span class="comment">//首秀按名称还可以具有一对尖括号，但模板在此必须是可见的</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">void</span> ::error() &#123;&#125;</span><br><span class="line">    		<span class="comment">//错误：受限的友元不能是一个定义</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在前面的例子中，我们是在一个普通类里面声明友元函数。如果需要在类模板里面声明友元函数，前面的这些规则仍然是适用的，唯一的区别就是：可以使用模板参数来标识友元函数。</p>
+<p>然而，如果我们在类模板中定义一个友元函数，那么将会出现一个很有趣的现象。<strong>因为对于任何只在模板内部声明的实体，都要等到模板被实例化之后，才会使一个具体的实体：在这之前该实体是不存在的。类模板的友元函数也是如此。</strong>考虑下面的例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Creator</span>&#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">friend</span> <span class="keyword">void</span> <span class="title">appear</span><span class="params">()</span></span>&#123;</span><br><span class="line">        ...		<span class="comment">//一个新函数::appear()，但要等到Creator被实例化之后才存在</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Creator&lt;<span class="keyword">void</span>&gt; miracle;	<span class="comment">//这时才生成::appear()</span></span><br><span class="line">Creator&lt;<span class="keyword">double</span>&gt; oops;	<span class="comment">//错误::appear()第2次被生成。</span></span><br></pre></td></tr></table></figure>
+
+<p>最后一点就是：对于函数的实体处于类定义的内部，所以这些函数时内联函数。因此，在两个不同的翻译单元中可以生成相同的函数。</p>
+<h4 id="2-友元模板"><a href="#2-友元模板" class="headerlink" title="2. 友元模板"></a>2. 友元模板</h4><p>我们通常声明的友元只是：函数模板的实例或者类模板实例，我们指定的友元也只是特定的实体。然而，我们有时候需要让模板的所有实例都成为友元，这就需要声明友元模板。例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Manager</span>&#123;</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="keyword">friend</span> <span class="class"><span class="keyword">class</span> <span class="title">Task</span>;</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">void</span> Schedule&lt;T&gt;::dispatch(<span class="built_in">Task</span>&lt;T&gt;*);</span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="function"><span class="keyword">friend</span> <span class="keyword">int</span> <span class="title">ticket</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ++Manager::conter;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> counter;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>和普通友元的声明一样，只有在友元模板声明的是一个非受限的函数名称，并且后面没有尖括号的情况下，该友元模板声明才能成为定义。</p>
+<p>友元模板声明的只是基本模板和基本模板的成员。当进行这些声明之后，与该基本模板相对应的模板局部特换和显式特化都会被自动看成友元。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/template/" rel="tag"># template</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/01/11/win10%E8%87%AA%E5%B8%A6%E8%BE%93%E5%85%A5%E6%B3%95%E6%89%93%E4%B8%8D%E5%87%BA%E4%B8%AD%E6%96%87%E6%A0%87%E7%82%B9/" rel="next" title="win10自带输入法打不出中文标点">
+                  <i class="fa fa-chevron-left"></i> win10自带输入法打不出中文标点
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数化声明"><span class="nav-number">2.</span> <span class="nav-text">参数化声明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-虚成员函数"><span class="nav-number">2.1.</span> <span class="nav-text">1. 虚成员函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-模板的链接"><span class="nav-number">2.2.</span> <span class="nav-text">2. 模板的链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-基本模板"><span class="nav-number">2.3.</span> <span class="nav-text">3. 基本模板</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模板参数"><span class="nav-number">3.</span> <span class="nav-text">模板参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-类型参数"><span class="nav-number">3.1.</span> <span class="nav-text">1. 类型参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-非类型参数"><span class="nav-number">3.2.</span> <span class="nav-text">2. 非类型参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-模板的模板参数"><span class="nav-number">3.3.</span> <span class="nav-text">3. 模板的模板参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-缺省模板实参"><span class="nav-number">3.4.</span> <span class="nav-text">4. 缺省模板实参</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模板实参"><span class="nav-number">4.</span> <span class="nav-text">模板实参</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-函数模板实参"><span class="nav-number">4.1.</span> <span class="nav-text">1. 函数模板实参</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-类型实参"><span class="nav-number">4.2.</span> <span class="nav-text">2. 类型实参</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-非类型实参"><span class="nav-number">4.3.</span> <span class="nav-text">3. 非类型实参</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-模板的模板实参"><span class="nav-number">4.4.</span> <span class="nav-text">4. 模板的模板实参</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-实参的等价性"><span class="nav-number">4.5.</span> <span class="nav-text">5. 实参的等价性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#友元"><span class="nav-number">5.</span> <span class="nav-text">友元</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-友元函数"><span class="nav-number">5.1.</span> <span class="nav-text">1. 友元函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-友元模板"><span class="nav-number">5.2.</span> <span class="nav-text">2. 友元模板</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="liuyun"
+      src="/images/image.jpg">
+  <p class="site-author-name" itemprop="name">liuyun</p>
+  <div class="site-description" itemprop="description">blog of liuyun</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">liuyun</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
