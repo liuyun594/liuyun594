@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="liuyun's blog" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="前言Win32中有很多字符类型，char，wchar_t，TCHAR。本文总结各种类型字符串的目的和一些简单用法。 绝大多数转载自Win32 字符编码">
+<meta name="keywords" content="C,Win32">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Win32编码">
+<meta property="og:url" content="liuyun594@github.io&#x2F;2020&#x2F;03&#x2F;04&#x2F;Win32%E7%BC%96%E7%A0%81&#x2F;index.html">
+<meta property="og:site_name" content="liuyun&#39;s blog">
+<meta property="og:description" content="前言Win32中有很多字符类型，char，wchar_t，TCHAR。本文总结各种类型字符串的目的和一些简单用法。 绝大多数转载自Win32 字符编码">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-03-04T15:52:03.365Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="liuyun594@github.io/2020/03/04/Win32%E7%BC%96%E7%A0%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Win32编码 | liuyun's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">liuyun's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="liuyun594@github.io/2020/03/04/Win32%E7%BC%96%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/image.jpg">
+      <meta itemprop="name" content="liuyun">
+      <meta itemprop="description" content="blog of liuyun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="liuyun's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Win32编码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-04 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-04T00:00:00+08:00">2020-03-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/win32/" itemprop="url" rel="index">
+                    <span itemprop="name">win32</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>Win32中有很多字符类型，char，wchar_t，TCHAR。本文总结各种类型字符串的目的和一些简单用法。</p>
+<p>绝大多数转载自<a href="https://www.cnblogs.com/BeginGame/archive/2011/07/27/2118535.html" target="_blank" rel="noopener">Win32 字符编码</a></p>
+<a id="more"></a>
+
+<br/>
+
+<br/>
+
+<h3 id="字符基础——ASCII、DBSC、Unicode"><a href="#字符基础——ASCII、DBSC、Unicode" class="headerlink" title="字符基础——ASCII、DBSC、Unicode"></a>字符基础——ASCII、DBSC、Unicode</h3><p>先介绍字符类型。有三种编码模式对应三种字符类型。</p>
+<ul>
+<li>单字节字符集（single-byte character set or <strong>SBCS</strong>）<ul>
+<li>在这种编码模式下，所有的字符都只用一个字节标识。ASCII是SBCS。一个字节表示的0用来标识SBCS字符串的结束。</li>
+</ul>
+</li>
+<li>多字节字符集（multi-byte character set or <strong>MBCS</strong>）<ul>
+<li>一个MBCS编码包含一些一个字节长的字符，而另一些字符大于一个字节的长度。用在Windows里的MBCS包含两种字符类型，单字节字符（single-byte characters）和双字节字符（double-byte characters）。由于Windows里使用的多字节字符绝大部分是两个字节长，所以MBCS常被用DBCS代替。</li>
+<li>在DBCS编码模式中，一些特定的值被保留用来表明他们是双字节字符的一部分。例如GBK编码中，0x81-0xEF之间的值标识这是一个双字节字符，下一个字节是这个字符的一部分，这样的值被称作”leading bytes”，他们都大于0x7F。跟随在一个leading byte字节之后的字节被称作”trail byte”。在DBCS中，trail byte可以是任意非0值。像SBCS一样，DBCS字符串的结束标志也是一个单字节标识的0.</li>
+</ul>
+</li>
+<li>Unicode<ul>
+<li>Unicode是一种所有的字符都是用两个字节的彪马模式。Unicode字符又是也被称作宽字符，因为它比单字节字符宽（使用了更多的存储控件）。注意，Unicode不能被看作MBCS。MBCS的独特之处在于它的字符使用不同长度的字节编码。Unicode字符串使用两个字节标识的0作为它的结束标志。</li>
+</ul>
+</li>
+</ul>
+<p>单字节字符包含拉丁文字母表，accented characters及ASCII标准和DOS操作系统定义的图形字符。双字节被用来标识东亚及中东的语言。Unicode被用在COM以及Windows NT操作系统内部。</p>
+<p>当使用char时，我们处理的是单字节字符。双字节字符（DBCS）也用char类型类进行操作。Unicode字符用wchar_t来标识。Unicode字符和字符串常量用前缀L来表示，例如：</p>
+<p>wchar_t wch = L”Hello”;    //12 bytes，6个宽字节</p>
+<p>wchar_t China = L”1”;    // 两个字节   0x0031</p>
+<br/>
+
+<br/>
+
+<h3 id="字符在内存中是怎样存储的"><a href="#字符在内存中是怎样存储的" class="headerlink" title="字符在内存中是怎样存储的"></a>字符在内存中是怎样存储的</h3><ul>
+<li>单字节字符串：每个字符占一个字节按照顺序依次存储，最后以单字节表示的0结束。例如，”Bob”的存储形式如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>42</th>
+<th>6F</th>
+<th>62</th>
+<th>00</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B</td>
+<td>o</td>
+<td>b</td>
+<td>EOS</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Unicode的存储形式，使用两个字节表示，L”Bob”</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>42 00</th>
+<th>6F 00</th>
+<th>62 00</th>
+<th>00 00</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B</td>
+<td>o</td>
+<td>b</td>
+<td>EOS</td>
+</tr>
+</tbody></table>
+<ul>
+<li>DBCS，字符串”中国话”在内存中的存储形式如下（LB和TB分别表示leading byte和trail byte）：<ul>
+<li>值得注意的是，”中”的值不能被理解称WORD型值0xD0D6，而应该看作两个值D6和D0以这种顺序被作为”中”的编码。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>D6 D0</th>
+<th>B9 Fa</th>
+<th>BB B0</th>
+<th>00</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LB TB</td>
+<td>LB TB</td>
+<td>LB TB</td>
+<td>EOS</td>
+</tr>
+<tr>
+<td>中</td>
+<td>国</td>
+<td>话</td>
+<td>EOS</td>
+</tr>
+</tbody></table>
+<br/>
+
+<br/>
+
+<h3 id="使用字符串处理函数"><a href="#使用字符串处理函数" class="headerlink" title="使用字符串处理函数"></a>使用字符串处理函数</h3><p>我们都已经见过C语言中的字符串函数，strcpy()，sprintf()，atoll()等。这些字符串之应该用来处理单字节字符字符串。标准库也提供了仅适用于Unicode类型字符串的函数，比如wcscpy()，swprintf()，wtol()等</p>
+<p>微软还在它的CRL（C runtime library）中增加了操作DBCS字符串的版本。str***()函数都有对应名字的DBCS版本_mbs***()。如果可能会遇到DBCS字符串，你应该使用_mbs***()函数，因为他们也可以处理SBCS字符串（一个DBCS字符串也可能含有单字节字符，这就是为什么_mbs***()函数也能处理SBCS字符串的原因）。</p>
+<p>来看一个典型的字符串来阐明为什么需要不同版本的字符串处理函数。我们还是使用前面的Unicode字符串L”Bob”：</p>
+<table>
+<thead>
+<tr>
+<th>42 00</th>
+<th>6F 00</th>
+<th>62 00</th>
+<th>00 00</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B</td>
+<td>o</td>
+<td>b</td>
+<td>EOS</td>
+</tr>
+</tbody></table>
+<p>因为x86CPU是小端序，，值0x0042在内存中的存储形式是42 00。如果这个字符串被传给strlen()，它讲先看到第一个字节42，然后是00，而00是字符串结束的标志，于是strlen()返回1.如果把”Bob”传给wcslen()，将会得出更坏的结果，wcslen()将会先看到0x6F42，然后是0x0062，然后一直读到你的缓冲区末尾，直到发现00 00结束标志或者引起了GPF（一般保护性错误）。</p>
+<p>那str***()和_mbs***()之间有没有区别呢？str***()函数根部不考虑DBCS字符，而_mbs***()考虑。当使用DBCS时，指针的前后移动应使用CharPrev()和CharNext()。</p>
+<br/>
+
+<br/>
+
+<h3 id="Win32-API中的MBCS和Unicode"><a href="#Win32-API中的MBCS和Unicode" class="headerlink" title="Win32 API中的MBCS和Unicode"></a>Win32 API中的MBCS和Unicode</h3><p>Win32中每个与字符串相关的API和message都有两个版本。一个版本接收MBCS字符串，另一个接收Unicode字符串。例如，根本SetWindowText()这个API，相反，有SetWindowTextA()和SetWindowTextW()。后缀A表明这是MBCS函数，后缀W表示这是Unicode版本的函数。</p>
+<p>当你build一个Windows程序，你可以选择是使用MBCS或者Unicode APIs。<code>winuser.h</code>头文件包含了一些宏，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL WINAPI <span class="title">SetWindowTextA</span><span class="params">(HWND hWnd, LPCSTR lpString)</span></span>;</span><br><span class="line"><span class="function">BOOL WINAPI <span class="title">SetWindowTextW</span> <span class="params">( HWND hWnd, LPCWSTR lpString )</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> UNICODE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SetWindowText SetWindowTextW</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SetWindowText SetWindowTextA</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>当你使用MBCS APIs开build程序时，UNICODE没有被定义，所以预处理器看到：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SetWindowText SetWindowTextA</span></span><br></pre></td></tr></table></figure>
+
+<p>这个宏把所有对<code>SetWindowText</code>的调用都转换成真正地API函数<code>SetWindowTextA</code></p>
+<p>所以，如果你想把默认使用的API函数编程Unicode版的，你可以在预处理器设置中，把_MBCS从预定义的宏列表中删除，然后添加UNICODE和_UNICODE（两个都需要定义，因为不同的头文件可能使用不同的宏），在VS中简单一点，可以选择字符集为Unicode。然而，如果你用char来定义你的字符串，你将会陷入一个尴尬的境地。考虑下面的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HWND hwnd = GetSomeWindowHandle();</span><br><span class="line"><span class="keyword">char</span> szNewText[] = <span class="string">"we love Bob!"</span>;</span><br><span class="line">SetWindowText ( hwnd, szNewText );</span><br></pre></td></tr></table></figure>
+
+<p>在预处理器把<code>SetWindowText</code>用<code>SetWindowTextW</code>来替换后，代码变成：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HWND hwnd = GetSomeWindowHandle();</span><br><span class="line"><span class="keyword">char</span> szNewText[] = <span class="string">"we love Bob!"</span>;</span><br><span class="line">SetWindowTextW ( hwnd, szNewText );</span><br></pre></td></tr></table></figure>
+
+<p>我们把单字节字符串传给了一个以Unicode字符串做参数的函数。解决这个问题的第一个方案是使用#ifdef来包含字符串变量的定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HWND hwnd = GetSomeWindowHandle();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> UNICODE</span></span><br><span class="line"><span class="keyword">wchar_t</span> szNewText[] = <span class="string">L"we love Bob!"</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="keyword">char</span> szNewText[] = <span class="string">"we love Bob!"</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">SetWindowText ( hwnd, szNewText );</span><br></pre></td></tr></table></figure>
+
+<p>你可能已经感受到了这样讲会使你多么头疼。完美的解决方案是使用TCHAR。</p>
+<br/>
+
+<br/>
+
+<h3 id="使用TCHAR"><a href="#使用TCHAR" class="headerlink" title="使用TCHAR"></a>使用TCHAR</h3><p>TCHAR是一种字符串类型，它让你在以MBCS和UNICODE来build程序时可以使用同样的代码，不需要使用繁琐的宏定义来包含你的代码。TCHAR定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> UNICODE</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">wchar_t</span> TCHAR;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span> TCHAR;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>所以用MBCS来build时，TCHAR时char，使用UNICODE时，TCHAR时wchar_t。还有一个宏来处理定义Unicode字符串常量时所需的L前缀。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> UNICODE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _T(x) L##x</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _T(x) x</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="comment">//现在可以用TEXT()宏</span></span><br></pre></td></tr></table></figure>
+
+<p>##是一个预处理操作符，它可以把两个参数量子一起。如果你的代码中需要字符串常量，在它前面加上_T宏。如果你使用Unicode来build，他会在字符串常量前面加上L前缀。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TCHAR szNewText[] = _T(<span class="string">"we love Bob!"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>像是用宏来隐藏SetWindowTextA/W的细节一样，还有很多可以供你使用的宏来实现str***()和_mbs***()等字符串函数。例如，你可以使用_tcsrchr宏来替换strchr()、_mbsrchr()和wcsrchr()。_tcsrchr根据你预定义的宏是_MBCS还是UNICODE来扩展成正确的函数，就像SetWindowText所做的一样。   </p>
+<p>不仅str***()函数有TCHAR宏。其他的函数如，  _stprintf（代替sprinft()和swprintf()）,_tfopen（代替fopen()和_wfopen()）。MSDN中”Generic-Text Routine Mappings.”标题下有完整的宏列表。</p>
+<br/>
+
+<br/>
+
+<h3 id="字符串和TCHAR-typedefs"><a href="#字符串和TCHAR-typedefs" class="headerlink" title="字符串和TCHAR typedefs"></a>字符串和TCHAR typedefs</h3><p>由于Win32 API文档的函数列表使用函数的常用名字（例如，”SetWindowText”），所有的字符串都是用TCHAR来定义的。（除了XP中引入的只适用于Unicode的API）。下面列出一些常用的typedefs，你可以在MSDN中看到它们。</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>MBCS</th>
+<th>Unicode</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>WCHAR</td>
+<td>wchar_t</td>
+<td>wchar_t</td>
+</tr>
+<tr>
+<td>LPSTR</td>
+<td>zero-terminated string of char (char*)</td>
+<td>zero-terminated string of char (char*)</td>
+</tr>
+<tr>
+<td>LPCSTR</td>
+<td>constant zero-terminated string of char (const char*)</td>
+<td>constant zero-terminated string of char (const char*)</td>
+</tr>
+<tr>
+<td>LPWSTR</td>
+<td>zero-terminated Unicode string (wchar_t*)</td>
+<td>zero-terminated Unicode string (wchar_t*)</td>
+</tr>
+<tr>
+<td>LPCWSTR</td>
+<td>constant zero-terminated Unicode string (const wchar_t*)</td>
+<td>constant zero-terminated Unicode string (const wchar_t*)</td>
+</tr>
+<tr>
+<td>TCHAR</td>
+<td>char</td>
+<td>wchar_t</td>
+</tr>
+<tr>
+<td>LPTSTR</td>
+<td>zero-terminated string of TCHAR (TCHAR*)</td>
+<td>zero-terminated string of TCHAR (TCHAR*)</td>
+</tr>
+<tr>
+<td>LPCTSTR</td>
+<td>constant zero-terminated string of TCHAR (const TCHAR*)</td>
+<td>constant zero-terminated string of TCHAR (const TCHAR*)</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C</a>
+              <a href="/tags/Win32/" rel="tag"># Win32</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/01/12/C++%E6%A8%A1%E6%9D%BF%E5%9F%BA%E7%A1%80/" rel="next" title="C++模板基础">
+                  <i class="fa fa-chevron-left"></i> C++模板基础
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符基础——ASCII、DBSC、Unicode"><span class="nav-number">2.</span> <span class="nav-text">字符基础——ASCII、DBSC、Unicode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符在内存中是怎样存储的"><span class="nav-number">3.</span> <span class="nav-text">字符在内存中是怎样存储的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用字符串处理函数"><span class="nav-number">4.</span> <span class="nav-text">使用字符串处理函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Win32-API中的MBCS和Unicode"><span class="nav-number">5.</span> <span class="nav-text">Win32 API中的MBCS和Unicode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用TCHAR"><span class="nav-number">6.</span> <span class="nav-text">使用TCHAR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串和TCHAR-typedefs"><span class="nav-number">7.</span> <span class="nav-text">字符串和TCHAR typedefs</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="liuyun"
+      src="/images/image.jpg">
+  <p class="site-author-name" itemprop="name">liuyun</p>
+  <div class="site-description" itemprop="description">blog of liuyun</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">liuyun</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
