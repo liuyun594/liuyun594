@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="liuyun594@github.io/"/>
-  <updated>2020-03-04T15:52:03.365Z</updated>
+  <updated>2020-03-05T04:57:38.732Z</updated>
   <id>liuyun594@github.io/</id>
   
   <author>
@@ -17,9 +17,34 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Win32字符串函数对照</title>
+    <link href="liuyun594@github.io/2020/03/05/win32/Win32%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0%E5%AF%B9%E7%85%A7/"/>
+    <id>liuyun594@github.io/2020/03/05/win32/Win32%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0%E5%AF%B9%E7%85%A7/</id>
+    <published>2020-03-04T16:00:00.000Z</published>
+    <updated>2020-03-05T04:57:38.732Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>Win32支持的各种字符编码方式对应各自的函数集，这里汇总了各个函数的对照，包括SBCS、DBCS、Unicode和TCHAR。</p><a id="more"></a><br/><br /><h3 id="函数对照表"><a href="#函数对照表" class="headerlink" title="函数对照表"></a>函数对照表</h3><table><thead><tr><th>Generic-Text Routine Mappings(TCHAR)</th><th>SBCS</th><th>MBCS</th><th>Unicode</th></tr></thead><tbody><tr><td>_cgetts</td><td>_cgets</td><td>_cgets</td><td>_cgetws</td></tr><tr><td>_cgetts_s</td><td>_cgets_s</td><td>_cgets_s</td><td>_cgetws_s</td></tr><tr><td>_cputts</td><td>_cputs</td><td>_cputs</td><td>_cputws</td></tr><tr><td>_fgettc</td><td>fgetc</td><td>fgetc</td><td>fgetwc</td></tr><tr><td>_fgettchar</td><td>_fgetchar</td><td>_fgetchar</td><td>_fgetwchar</td></tr><tr><td>_fgetts</td><td>fgets</td><td>fgets</td><td>fgetws</td></tr><tr><td>_fputtc</td><td>fputc</td><td>fputc</td><td>fputwc</td></tr><tr><td>_fputtchar</td><td>_fputchar</td><td>_fputchar</td><td>_fputwchar</td></tr><tr><td>_fputts</td><td>fputs</td><td>fputs</td><td>fputws</td></tr><tr><td>_ftprintf</td><td>fprintf</td><td>fprintf</td><td>fwprintf</td></tr><tr><td>_ftprintf_s</td><td>fprintf_s</td><td>fprintf_s</td><td>fwprintf_s</td></tr><tr><td>_ftscanf</td><td>fscanf</td><td>fscanf</td><td>fwscanf</td></tr><tr><td>_ftscanf_s</td><td>fscanf_s</td><td>fscanf_s</td><td>fwscanf_s</td></tr><tr><td>_gettc</td><td>getc</td><td>getc</td><td>getwc</td></tr><tr><td>_gettch</td><td>_getch</td><td>_getch</td><td>_getwch</td></tr><tr><td>_gettchar</td><td>getchar</td><td>getchar</td><td>getwchar</td></tr><tr><td>_gettche</td><td>_getche</td><td>_getche</td><td>_getwche</td></tr><tr><td>_getts</td><td>gets</td><td>gets</td><td>getws</td></tr><tr><td>_getts_s</td><td>gets_s</td><td>gets_s</td><td>getws_s</td></tr><tr><td>_istalnum</td><td>isalnum</td><td>_ismbcalnum</td><td>iswalnum</td></tr><tr><td>_istalpha</td><td>isalpha</td><td>_ismbcalpha</td><td>iswalpha</td></tr><tr><td>_istascii</td><td>isascii</td><td>isascii</td><td>iswascii</td></tr><tr><td>_istcntrl</td><td>iscntrl</td><td>iscntrl</td><td>iswcntrl</td></tr><tr><td>_istdigit</td><td>isdigit</td><td>_ismbcdigit</td><td>iswdigit</td></tr><tr><td>_istgraph</td><td>isgraph</td><td>_ismbcgraph</td><td>iswgraph</td></tr><tr><td>_istlead</td><td>Always returns false</td><td>_ismbblead</td><td>Always returns false</td></tr><tr><td>_istleadbyte</td><td>Always returns false</td><td>isleadbyte</td><td>Always returns false</td></tr><tr><td>_istlegal</td><td>Always returns true</td><td>_ismbclegal</td><td>Always returns true</td></tr><tr><td>_istlower</td><td>islower</td><td>_ismbclower</td><td>iswlower</td></tr><tr><td>_istprint</td><td>isprint</td><td>_ismbcprint</td><td>iswprint</td></tr><tr><td>_istpunct</td><td>ispunct</td><td>_ismbcpunct</td><td>iswpunct</td></tr><tr><td>_istspace</td><td>isspace</td><td>_ismbcspace</td><td>iswspace</td></tr><tr><td>_istupper</td><td>isupper</td><td>_ismbcupper</td><td>iswupper</td></tr><tr><td>_istxdigit</td><td>isxdigit</td><td>isxdigit</td><td>iswxdigit</td></tr><tr><td>_itot</td><td>_itoa</td><td>_itoa</td><td>_itow</td></tr><tr><td>_itot_s</td><td>_itoa_s</td><td>_itoa_s</td><td>_itow_s</td></tr><tr><td>_ltot</td><td>_ltoa</td><td>_ltoa</td><td>_ltow</td></tr><tr><td>_ltot_s</td><td>_ltoa_s</td><td>_ltoa_s</td><td>_ltow_s</td></tr><tr><td>_puttc</td><td>putc</td><td>putc</td><td>putwc</td></tr><tr><td>_puttch</td><td>_putch</td><td>_putch</td><td>_putwch</td></tr><tr><td>_puttchar</td><td>putchar</td><td>putchar</td><td>putwchar</td></tr><tr><td>_putts</td><td>puts</td><td>puts</td><td>_putws</td></tr><tr><td>_sctprintf</td><td>_scprintf</td><td>_scprintf</td><td>_scwprintf</td></tr><tr><td>_sntprintf</td><td>_snprintf</td><td>_snprintf</td><td>_snwprintf</td></tr><tr><td>_sntprintf_s</td><td>_snprintf_s</td><td>_snprintf_s</td><td>_snwprintf_s</td></tr><tr><td>_sntscanf</td><td>_snscanf</td><td>_snscanf</td><td>_snwscanf</td></tr><tr><td>_sntscanf_s</td><td>_snscanf_s</td><td>_snscanf_s</td><td>_snwscanf_s</td></tr><tr><td>_stprintf</td><td>sprintf</td><td>sprintf</td><td>swprintf</td></tr><tr><td>_stprintf_s</td><td>sprintf_s</td><td>sprintf_s</td><td>swprintf_s</td></tr><tr><td>_stscanf</td><td>sscanf</td><td>sscanf</td><td>swscanf</td></tr><tr><td>_stscanf_s</td><td>sscanf_s</td><td>sscanf_s</td><td>swscanf_s</td></tr><tr><td>_taccess</td><td>_access</td><td>_access</td><td>_waccess</td></tr><tr><td>_taccess_s</td><td>_access_s</td><td>_access_s</td><td>_waccess_s</td></tr><tr><td>_tasctime</td><td>asctime</td><td>asctime</td><td>_wasctime</td></tr><tr><td>_tasctime_s</td><td>asctime_s</td><td>asctime_s</td><td>_wasctime_s</td></tr><tr><td>_tccmp</td><td>Maps to macro or inline function</td><td>_mbsncmp</td><td>Maps to macro or inline function</td></tr><tr><td>_tccpy</td><td>Maps to macro or inline function</td><td>_mbccpy</td><td>Maps to macro or inline function</td></tr><tr><td>_tccpy_s</td><td>strcpy_s</td><td>_mbccpy_s</td><td>wcscpy_s</td></tr><tr><td>_tchdir</td><td>_chdir</td><td>_chdir</td><td>_wchdir</td></tr><tr><td>_tclen</td><td>Maps to macro or inline function</td><td>_mbclen</td><td>Maps to macro or inline function</td></tr><tr><td>_tchmod</td><td>_chmod</td><td>_chmod</td><td>_wchmod</td></tr><tr><td>_tcprintf</td><td>_cprintf</td><td>_cprintf</td><td>_cwprintf</td></tr><tr><td>_tcprintf_s</td><td>_cprintf_s</td><td>_cprintf_s</td><td>_cwprintf_s</td></tr><tr><td>_tcreat</td><td>_creat</td><td>_creat</td><td>_wcreat</td></tr><tr><td>_tcscanf</td><td>_cscanf</td><td>_cscanf</td><td>_cwscanf</td></tr><tr><td>_tcscanf_s</td><td>_cscanf_s</td><td>_cscanf_s</td><td>_cwscanf_s</td></tr><tr><td>_tcscat</td><td>strcat</td><td>_mbscat</td><td>wcscat</td></tr><tr><td>_tcscat_s</td><td>strcat_s</td><td>_mbscat_s</td><td>wcscat_s</td></tr><tr><td>_tcschr</td><td>strchr</td><td>_mbschr</td><td>wcschr</td></tr><tr><td>_tcsclen</td><td>strlen</td><td>_mbslen</td><td>wcslen</td></tr><tr><td>_tcsclen_s</td><td>strlen_s</td><td>_mbslen_s</td><td>wcslen_s</td></tr><tr><td>_tcscmp</td><td>strcmp</td><td>_mbscmp</td><td>wcscmp</td></tr><tr><td>_tcscoll</td><td>strcoll</td><td>_mbscoll</td><td>wcscoll</td></tr><tr><td>_tcscpy</td><td>strcpy</td><td>_mbscpy</td><td>wcscpy</td></tr><tr><td>_tcscpy_s</td><td>strcpy_s</td><td>_mbscpy_s</td><td>wcscpy_s</td></tr><tr><td>_tcscspn</td><td>strcspn</td><td>_mbscspn</td><td>wcscspn</td></tr><tr><td>_tcsdec</td><td>_strdec</td><td>_mbsdec</td><td>_wcsdec</td></tr><tr><td>_tcsdup</td><td>_strdup</td><td>_mbsdup</td><td>_wcsdup</td></tr><tr><td>_tcserror</td><td>strerror</td><td>strerror</td><td>_wcserror</td></tr><tr><td>_tcserror_s</td><td>strerror_s</td><td>strerror_s</td><td>_wcserror_s</td></tr><tr><td>_tcsftime</td><td>strftime</td><td>strftime</td><td>wcsftime</td></tr><tr><td>_tcsicmp</td><td>_stricmp</td><td>_mbsicmp</td><td>_wcsicmp</td></tr><tr><td>_tcsicoll</td><td>_stricoll</td><td>_mbsicoll</td><td>_wcsicoll</td></tr><tr><td>_tcsinc</td><td>_strinc</td><td>_mbsinc</td><td>_wcsinc</td></tr><tr><td>_tcslen</td><td>strlen</td><td>strlen</td><td>wcslen</td></tr><tr><td>_tcslen_s</td><td>strlen_s</td><td>strlen_s</td><td>wcslen_s</td></tr><tr><td>_tcslwr</td><td>_strlwr</td><td>_mbslwr</td><td>_wcslwr</td></tr><tr><td>_tcslwr_s</td><td>_strlwr_s</td><td>_mbslwr_s</td><td>_wcslwr_s</td></tr><tr><td>_tcsnbcnt</td><td>_strncnt</td><td>_mbsnbcnt</td><td>_wcsncnt</td></tr><tr><td>_tcsncat</td><td>strncat</td><td>_mbsnbcat</td><td>wcsncat</td></tr><tr><td>_tcsncat_s</td><td>strncat_s</td><td>_mbsnbcat_s</td><td>wcsncat_s</td></tr><tr><td>_tcsnccat</td><td>strncat</td><td>_mbsncat</td><td>wcsncat</td></tr><tr><td>_tcsnccmp</td><td>strncmp</td><td>_mbsncmp</td><td>wcsncmp</td></tr><tr><td>_tcsnccmp_s</td><td>strncmp_s</td><td>_mbsncmp_s</td><td>wcsncmp_s</td></tr><tr><td>_tcsnccoll</td><td>_strncoll</td><td>_mbsncoll</td><td>_wcsncoll</td></tr><tr><td>_tcsncmp</td><td>strncmp</td><td>_mbsnbcmp</td><td>wcsncmp</td></tr><tr><td>_tcsnccnt</td><td>_strncnt</td><td>_mbsnccnt</td><td>_wcsncnt</td></tr><tr><td>_tcsnccpy</td><td>strncpy</td><td>_mbsncpy</td><td>wcsncpy</td></tr><tr><td>_tcsnccpy_s</td><td>strncpy_s</td><td>_mbsncpy_s</td><td>wcsncpy_s</td></tr><tr><td>_tcsncicmp</td><td>_strnicmp</td><td>_mbsnicmp</td><td>_wcsnicmp</td></tr><tr><td>_tcsncicoll</td><td>_strnicoll</td><td>_mbsnicoll</td><td>_wcsnicoll</td></tr><tr><td>_tcsncpy</td><td>strncpy</td><td>_mbsnbcpy</td><td>wcsncpy</td></tr><tr><td>_tcsncpy_s</td><td>strncpy_s</td><td>_mbsnbcpy_s</td><td>wcsncpy_s</td></tr><tr><td>_tcsncset</td><td>_strnset</td><td>_mbsnset</td><td>_wcsnset</td></tr><tr><td>_tcsnextc</td><td>_strnextc</td><td>_mbsnextc</td><td>_wcsnextc</td></tr><tr><td>_tcsnicmp</td><td>_strnicmp</td><td>_mbsnbicmp</td><td>_wcsnicmp</td></tr><tr><td>_tcsnicoll</td><td>_strnicoll</td><td>_mbsnbicoll</td><td>_wcsnicoll</td></tr><tr><td>_tcsninc</td><td>_strninc</td><td>_mbsninc</td><td>_wcsninc</td></tr><tr><td>_tcsnccnt</td><td>_strncnt</td><td>_mbsnccnt</td><td>_wcsncnt</td></tr><tr><td>_tcsnset</td><td>_strnset</td><td>_mbsnbset</td><td>_wcsnset</td></tr><tr><td>_tcspbrk</td><td>strpbrk</td><td>_mbspbrk</td><td>wcspbrk</td></tr><tr><td>_tcsspnp</td><td>_strspnp</td><td>_mbsspnp</td><td>_wcsspnp</td></tr><tr><td>_tcsrchr</td><td>strrchr</td><td>_mbsrchr</td><td>wcsrchr</td></tr><tr><td>_tcsrev</td><td>_strrev</td><td>_mbsrev</td><td>_wcsrev</td></tr><tr><td>_tcsset</td><td>_strset</td><td>_mbsset</td><td>_wcsset</td></tr><tr><td>_tcsspn</td><td>strspn</td><td>_mbsspn</td><td>wcsspn</td></tr><tr><td>_tcsstr</td><td>strstr</td><td>_mbsstr</td><td>wcsstr</td></tr><tr><td>_tcstod</td><td>strtod</td><td>strtod</td><td>wcstod</td></tr><tr><td>_tcstoi64</td><td>_strtoi64</td><td>_strtoi64</td><td>_wcstoi64</td></tr><tr><td>_tcstok</td><td>strtok</td><td>_mbstok</td><td>wcstok</td></tr><tr><td>_tcstok_s</td><td>strtok_s</td><td>_mbstok_s</td><td>wcstok_s</td></tr><tr><td>_tcstol</td><td>strtol</td><td>strtol</td><td>wcstol</td></tr><tr><td>_tcstoui64</td><td>_strtoui64</td><td>_strtoui64</td><td>_wcstoui64</td></tr><tr><td>_tcstoul</td><td>strtoul</td><td>strtoul</td><td>wcstoul</td></tr><tr><td>_tcsupr</td><td>_strupr</td><td>_mbsupr</td><td>_wcsupr</td></tr><tr><td>_tcsupr_s</td><td>_strupr_s</td><td>_mbsupr_s</td><td>_wcsupr_s</td></tr><tr><td>_tcsxfrm</td><td>strxfrm</td><td>strxfrm</td><td>wcsxfrm</td></tr><tr><td>_tctime</td><td>ctime</td><td>ctime</td><td>_wctime</td></tr><tr><td>_tctime_s</td><td>ctime_s</td><td>ctime_s</td><td>_wctime_s</td></tr><tr><td>_tctime32</td><td>_ctime32</td><td>_ctime32</td><td>_wctime32</td></tr><tr><td>_tctime32_s</td><td>_ctime32_s</td><td>_ctime32_s</td><td>_wctime32_s</td></tr><tr><td>_tctime64</td><td>_ctime64</td><td>_ctime64</td><td>_wctime64</td></tr><tr><td>_tctime64_s</td><td>_ctime64_s</td><td>_ctime64_s</td><td>_wctime64_s</td></tr><tr><td>_texecl</td><td>_execl</td><td>_execl</td><td>_wexecl</td></tr><tr><td>_texecle</td><td>_execle</td><td>_execle</td><td>_wexecle</td></tr><tr><td>_texeclp</td><td>_execlp</td><td>_execlp</td><td>_wexeclp</td></tr><tr><td>_texeclpe</td><td>_execlpe</td><td>_execlpe</td><td>_wexeclpe</td></tr><tr><td>_texecv</td><td>_execv</td><td>_execv</td><td>_wexecv</td></tr><tr><td>_texecve</td><td>_execve</td><td>_execve</td><td>_wexecve</td></tr><tr><td>_texecvp</td><td>_execvp</td><td>_execvp</td><td>_wexecvp</td></tr><tr><td>_texecvpe</td><td>_execvpe</td><td>_execvpe</td><td>_wexecvpe</td></tr><tr><td>_tfdopen</td><td>_fdopen</td><td>_fdopen</td><td>_wfdopen</td></tr><tr><td>_tfindfirst</td><td>_findfirst</td><td>_findfirst</td><td>_wfindfirst</td></tr><tr><td>_tfindnext</td><td>_findnext</td><td>_findnext</td><td>_wfindnext</td></tr><tr><td>_tfindnext32</td><td>_findnext32</td><td>_findnext32</td><td>_wfindnext32</td></tr><tr><td>_tfindnext64</td><td>_findnext64</td><td>_findnext64</td><td>_wfindnext64</td></tr><tr><td>_tfindnexti64</td><td>_findnexti64</td><td>_findnexti64</td><td>_wfindnexti64</td></tr><tr><td>_tfindnexti6432</td><td>_findnexti6432</td><td>_findnexti6432</td><td>_wfindnexti6432</td></tr><tr><td>_tfindnext32i64</td><td>_findnext32i64</td><td>_findnext32i64</td><td>_wfindnext32i64</td></tr><tr><td>_tfopen</td><td>fopen</td><td>fopen</td><td>_wfopen</td></tr><tr><td>_tfopen_s</td><td>fopen_s</td><td>fopen_s</td><td>_wfopen_s</td></tr><tr><td>_tfreopen</td><td>freopen</td><td>freopen</td><td>_wfreopen</td></tr><tr><td>_tfreopen_s</td><td>freopen_s</td><td>freopen_s</td><td>_wfreopen_s</td></tr><tr><td>_tfsopen</td><td>_fsopen</td><td>_fsopen</td><td>_wfsopen</td></tr><tr><td>_tfullpath</td><td>_fullpath</td><td>_fullpath</td><td>_wfullpath</td></tr><tr><td>_tgetcwd</td><td>_getcwd</td><td>_getcwd</td><td>_wgetcwd</td></tr><tr><td>_tgetdcwd</td><td>_getdcwd</td><td>_getdcwd</td><td>_wgetdcwd</td></tr><tr><td>_tgetenv</td><td>getenv</td><td>getenv</td><td>_wgetenv</td></tr><tr><td>_tgetenv_s</td><td>getenv_s</td><td>getenv_s</td><td>_wgetenv_s</td></tr><tr><td>_tmain</td><td>main</td><td>main</td><td>wmain</td></tr><tr><td>_tmakepath</td><td>_makepath</td><td>_makepath</td><td>_wmakepath</td></tr><tr><td>_tmakepath_s</td><td>_makepath_s</td><td>_makepath_s</td><td>_wmakepath_s</td></tr><tr><td>_tmkdir</td><td>_mkdir</td><td>_mkdir</td><td>_wmkdir</td></tr><tr><td>_tmktemp</td><td>_mktemp</td><td>_mktemp</td><td>_wmktemp</td></tr><tr><td>_tmktemp_s</td><td>_mktemp_s</td><td>_mktemp_s</td><td>_wmktemp_s</td></tr><tr><td>_topen</td><td>_open</td><td>_open</td><td>_wopen</td></tr><tr><td>_topen_s</td><td>_open_s</td><td>_open_s</td><td>_wopen_s</td></tr><tr><td>_totlower</td><td>tolower</td><td>_mbctolower</td><td>towlower</td></tr><tr><td>_totupper</td><td>toupper</td><td>_mbctoupper</td><td>towupper</td></tr><tr><td>_tperror</td><td>perror</td><td>perror</td><td>_wperror</td></tr><tr><td>_tpopen</td><td>_popen</td><td>_popen</td><td>_wpopen</td></tr><tr><td>_tprintf</td><td>printf</td><td>printf</td><td>wprintf</td></tr><tr><td>_tprintf_s</td><td>printf_s</td><td>printf_s</td><td>wprintf_s</td></tr><tr><td>_tputenv</td><td>_putenv</td><td>_putenv</td><td>_wputenv</td></tr><tr><td>_tputenv_s</td><td>_putenv_s</td><td>_putenv_s</td><td>_wputenv_s</td></tr><tr><td>_tremove</td><td>remove</td><td>remove</td><td>_wremove</td></tr><tr><td>_trename</td><td>rename</td><td>rename</td><td>_wrename</td></tr><tr><td>_trmdir</td><td>_rmdir</td><td>_rmdir</td><td>_wrmdir</td></tr><tr><td>_tsearchenv</td><td>_searchenv</td><td>_searchenv</td><td>_wsearchenv</td></tr><tr><td>_tsearchenv_s</td><td>_searchenv_s</td><td>_searchenv_s</td><td>_wsearchenv_s</td></tr><tr><td>_tscanf</td><td>scanf</td><td>scanf</td><td>wscanf</td></tr><tr><td>_tscanf_s</td><td>scanf_s</td><td>scanf_s</td><td>wscanf_s</td></tr><tr><td>_tsetlocale</td><td>setlocale</td><td>setlocale</td><td>_wsetlocale</td></tr><tr><td>_tsopen</td><td>_sopen</td><td>_sopen</td><td>_wsopen</td></tr><tr><td>_tsopen_s</td><td>_sopen_s</td><td>_sopen_s</td><td>_wsopen_s</td></tr><tr><td>_tspawnl</td><td>_spawnl</td><td>_spawnl</td><td>_wspawnl</td></tr><tr><td>_tspawnle</td><td>_spawnle</td><td>_spawnle</td><td>_wspawnle</td></tr><tr><td>_tspawnlp</td><td>_spawnlp</td><td>_spawnlp</td><td>_wspawnlp</td></tr><tr><td>_tspawnlpe</td><td>_spawnlpe</td><td>_spawnlpe</td><td>_wspawnlpe</td></tr><tr><td>_tspawnv</td><td>_spawnv</td><td>_spawnv</td><td>_wspawnv</td></tr><tr><td>_tspawnve</td><td>_spawnve</td><td>_spawnve</td><td>_wspawnve</td></tr><tr><td>_tspawnvp</td><td>_spawnvp</td><td>_spawnvp</td><td>_wspawnvp</td></tr><tr><td>_tspawnvpe</td><td>_spawnvpe</td><td>_spawnvpe</td><td>_wspawnvpe</td></tr><tr><td>_tsplitpath</td><td>_splitpath</td><td>_splitpath</td><td>_wsplitpath</td></tr><tr><td>_tstat</td><td>_stat</td><td>_stat</td><td>_wstat</td></tr><tr><td>_tstat32</td><td>_stat32</td><td>_stat32</td><td>_wstat32</td></tr><tr><td>_tstati32</td><td>_stati32</td><td>_stati32</td><td>_wstati32</td></tr><tr><td>_tstat64</td><td>_stat64</td><td>_stat64</td><td>_wstat64</td></tr><tr><td>_tstati64</td><td>_stati64</td><td>_stati64</td><td>_wstati64</td></tr><tr><td>_tstof</td><td>atof</td><td>atof</td><td>_wtof</td></tr><tr><td>_tstoi</td><td>atoi</td><td>atoi</td><td>_wtoi</td></tr><tr><td>_tstoi64</td><td>_atoi64</td><td>_atoi64</td><td>_wtoi64</td></tr><tr><td>_tstol</td><td>atol</td><td>atol</td><td>_wtol</td></tr><tr><td>_tstrdate</td><td>_strdate</td><td>_strdate</td><td>_wstrdate</td></tr><tr><td>_tstrdate_s</td><td>_strdate_s</td><td>_strdate_s</td><td>_wstrdate_s</td></tr><tr><td>_tstrtime</td><td>_strtime</td><td>_strtime</td><td>_wstrtime</td></tr><tr><td>_tstrtime_s</td><td>_strtime_s</td><td>_strtime_s</td><td>_wstrtime_s</td></tr><tr><td>_tsystem</td><td>system</td><td>system</td><td>_wsystem</td></tr><tr><td>_ttempnam</td><td>_tempnam</td><td>_tempnam</td><td>_wtempnam</td></tr><tr><td>_ttmpnam</td><td>tmpnam</td><td>tmpnam</td><td>_wtmpnam</td></tr><tr><td>_ttmpnam_s</td><td>tmpnam_s</td><td>tmpnam_s</td><td>_wtmpnam_s</td></tr><tr><td>_ttoi</td><td>atoi</td><td>atoi</td><td>_wtoi</td></tr><tr><td>_ttoi64</td><td>_atoi64</td><td>_atoi64</td><td>_wtoi64</td></tr><tr><td>_ttol</td><td>atol</td><td>atol</td><td>_wtol</td></tr><tr><td>_tunlink</td><td>_unlink</td><td>_unlink</td><td>_wunlink</td></tr><tr><td>_tutime</td><td>_utime</td><td>_utime</td><td>_wutime</td></tr><tr><td>_tutime32</td><td>_utime32</td><td>_utime32</td><td>_wutime32</td></tr><tr><td>_tutime64</td><td>_utime64</td><td>_utime64</td><td>_wutime64</td></tr><tr><td>_tWinMain</td><td>WinMain</td><td>WinMain</td><td>wWinMain</td></tr><tr><td>_ui64tot</td><td>_ui64toa</td><td>_ui64toa</td><td>_ui64tow</td></tr><tr><td>_ui64tot_s</td><td>_ui64toa_s</td><td>_ui64toa_s</td><td>_ui64tow_s</td></tr><tr><td>_ultot</td><td>_ultoa</td><td>_ultoa</td><td>_ultow</td></tr><tr><td>_ultot_s</td><td>_ultoa_s</td><td>_ultoa_s</td><td>_ultow_s</td></tr><tr><td>_ungettc</td><td>ungetc</td><td>ungetc</td><td>ungetwc</td></tr><tr><td>_ungettch</td><td>_ungetch</td><td>_ungetch</td><td>_ungetwch</td></tr><tr><td>_vftprintf</td><td>vfprintf</td><td>vfprintf</td><td>vfwprintf</td></tr><tr><td>_vftprintf_s</td><td>vfprintf_s</td><td>vfprintf_s</td><td>vfwprintf_S</td></tr><tr><td>_vsctprintf</td><td>_vscprintf</td><td>_vscprintf</td><td>_vscwprintf</td></tr><tr><td>_vsctprintf_s</td><td>_vscprintf_s</td><td>_vscprintf_s</td><td>_vscwprintf_S</td></tr><tr><td>_vsntprintf</td><td>_vsnprintf</td><td>_vsnprintf</td><td>_vsnwprintf</td></tr><tr><td>_vsntprintf_s</td><td>_vsnprintf_s</td><td>_vsnprintf_s</td><td>_vsnwprintf_s</td></tr><tr><td>_vstprintf</td><td>vsprintf</td><td>vsprintf</td><td>vswprintf</td></tr><tr><td>_vstprintf_s</td><td>vsprintf_s</td><td>vsprintf_s</td><td>vswprintf_s</td></tr><tr><td>_vtprintf</td><td>vprintf</td><td>vprintf</td><td>vwprintf</td></tr><tr><td>_vtprintf_s</td><td>vprintf_s</td><td>vprintf_s</td><td>vwprintf_s</td></tr></tbody></table>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;Win32支持的各种字符编码方式对应各自的函数集，这里汇总了各个函数的对照，包括SBCS、DBCS、Unicode和TCHAR。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="win32" scheme="liuyun594@github.io/categories/win32/"/>
+    
+    
+      <category term="C" scheme="liuyun594@github.io/tags/C/"/>
+    
+      <category term="win32" scheme="liuyun594@github.io/tags/win32/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Win32编码</title>
-    <link href="liuyun594@github.io/2020/03/04/Win32%E7%BC%96%E7%A0%81/"/>
-    <id>liuyun594@github.io/2020/03/04/Win32%E7%BC%96%E7%A0%81/</id>
+    <link href="liuyun594@github.io/2020/03/04/win32/Win32%E7%BC%96%E7%A0%81/"/>
+    <id>liuyun594@github.io/2020/03/04/win32/Win32%E7%BC%96%E7%A0%81/</id>
     <published>2020-03-03T16:00:00.000Z</published>
     <updated>2020-03-04T15:52:03.365Z</updated>
     
@@ -44,8 +69,8 @@
   
   <entry>
     <title>C++模板基础</title>
-    <link href="liuyun594@github.io/2020/01/12/C++%E6%A8%A1%E6%9D%BF%E5%9F%BA%E7%A1%80/"/>
-    <id>liuyun594@github.io/2020/01/12/C++%E6%A8%A1%E6%9D%BF%E5%9F%BA%E7%A1%80/</id>
+    <link href="liuyun594@github.io/2020/01/12/C++/C++%E6%A8%A1%E6%9D%BF%E5%9F%BA%E7%A1%80/"/>
+    <id>liuyun594@github.io/2020/01/12/C++/C++%E6%A8%A1%E6%9D%BF%E5%9F%BA%E7%A1%80/</id>
     <published>2020-01-11T16:00:00.000Z</published>
     <updated>2020-01-12T14:28:32.235Z</updated>
     
@@ -69,8 +94,8 @@
   
   <entry>
     <title>win10自带输入法打不出中文标点</title>
-    <link href="liuyun594@github.io/2020/01/11/win10%E8%87%AA%E5%B8%A6%E8%BE%93%E5%85%A5%E6%B3%95%E6%89%93%E4%B8%8D%E5%87%BA%E4%B8%AD%E6%96%87%E6%A0%87%E7%82%B9/"/>
-    <id>liuyun594@github.io/2020/01/11/win10%E8%87%AA%E5%B8%A6%E8%BE%93%E5%85%A5%E6%B3%95%E6%89%93%E4%B8%8D%E5%87%BA%E4%B8%AD%E6%96%87%E6%A0%87%E7%82%B9/</id>
+    <link href="liuyun594@github.io/2020/01/11/others/win10%E8%87%AA%E5%B8%A6%E8%BE%93%E5%85%A5%E6%B3%95%E6%89%93%E4%B8%8D%E5%87%BA%E4%B8%AD%E6%96%87%E6%A0%87%E7%82%B9/"/>
+    <id>liuyun594@github.io/2020/01/11/others/win10%E8%87%AA%E5%B8%A6%E8%BE%93%E5%85%A5%E6%B3%95%E6%89%93%E4%B8%8D%E5%87%BA%E4%B8%AD%E6%96%87%E6%A0%87%E7%82%B9/</id>
     <published>2020-01-10T16:00:00.000Z</published>
     <updated>2020-01-11T06:13:05.202Z</updated>
     
@@ -96,8 +121,8 @@
   
   <entry>
     <title>C++模板代码组织方式</title>
-    <link href="liuyun594@github.io/2020/01/10/C++%E6%A8%A1%E6%9D%BF%E4%BB%A3%E7%A0%81%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F/"/>
-    <id>liuyun594@github.io/2020/01/10/C++%E6%A8%A1%E6%9D%BF%E4%BB%A3%E7%A0%81%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F/</id>
+    <link href="liuyun594@github.io/2020/01/10/C++/C++%E6%A8%A1%E6%9D%BF%E4%BB%A3%E7%A0%81%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F/"/>
+    <id>liuyun594@github.io/2020/01/10/C++/C++%E6%A8%A1%E6%9D%BF%E4%BB%A3%E7%A0%81%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F/</id>
     <published>2020-01-09T16:00:00.000Z</published>
     <updated>2020-01-10T04:52:14.206Z</updated>
     
@@ -121,8 +146,8 @@
   
   <entry>
     <title>miracl库实现ElGamal加解密</title>
-    <link href="liuyun594@github.io/2019/11/22/miracl%E5%BA%93%E5%AE%9E%E7%8E%B0ElGamal%E5%8A%A0%E8%A7%A3%E5%AF%86/"/>
-    <id>liuyun594@github.io/2019/11/22/miracl%E5%BA%93%E5%AE%9E%E7%8E%B0ElGamal%E5%8A%A0%E8%A7%A3%E5%AF%86/</id>
+    <link href="liuyun594@github.io/2019/11/22/%E5%AF%86%E7%A0%81%E5%AD%A6/miracl%E5%BA%93%E5%AE%9E%E7%8E%B0ElGamal%E5%8A%A0%E8%A7%A3%E5%AF%86/"/>
+    <id>liuyun594@github.io/2019/11/22/%E5%AF%86%E7%A0%81%E5%AD%A6/miracl%E5%BA%93%E5%AE%9E%E7%8E%B0ElGamal%E5%8A%A0%E8%A7%A3%E5%AF%86/</id>
     <published>2019-11-22T04:53:55.000Z</published>
     <updated>2020-01-10T05:18:08.162Z</updated>
     
@@ -142,20 +167,20 @@
       <category term="原创" scheme="liuyun594@github.io/categories/%E5%A4%A7%E5%AD%A6%E4%BD%9C%E4%B8%9A/%E5%AF%86%E7%A0%81%E5%AD%A6/%E5%8E%9F%E5%88%9B/"/>
     
     
+      <category term="原创" scheme="liuyun594@github.io/tags/%E5%8E%9F%E5%88%9B/"/>
+    
       <category term="密码学" scheme="liuyun594@github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
     
       <category term="ElGamal" scheme="liuyun594@github.io/tags/ElGamal/"/>
     
       <category term="Miracl库" scheme="liuyun594@github.io/tags/Miracl%E5%BA%93/"/>
     
-      <category term="原创" scheme="liuyun594@github.io/tags/%E5%8E%9F%E5%88%9B/"/>
-    
   </entry>
   
   <entry>
     <title>Unix环境高级编程：进程环境</title>
-    <link href="liuyun594@github.io/2019/11/05/Unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/"/>
-    <id>liuyun594@github.io/2019/11/05/Unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/</id>
+    <link href="liuyun594@github.io/2019/11/05/unix/Unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/"/>
+    <id>liuyun594@github.io/2019/11/05/unix/Unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/</id>
     <published>2019-11-05T05:17:01.000Z</published>
     <updated>2019-11-21T05:18:50.923Z</updated>
     
@@ -189,8 +214,8 @@
   
   <entry>
     <title>unix环境高级编程：标准IO库</title>
-    <link href="liuyun594@github.io/2019/11/03/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%A0%87%E5%87%86IO%E5%BA%93/"/>
-    <id>liuyun594@github.io/2019/11/03/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%A0%87%E5%87%86IO%E5%BA%93/</id>
+    <link href="liuyun594@github.io/2019/11/03/unix/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%A0%87%E5%87%86IO%E5%BA%93/"/>
+    <id>liuyun594@github.io/2019/11/03/unix/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%A0%87%E5%87%86IO%E5%BA%93/</id>
     <published>2019-11-03T00:05:20.000Z</published>
     <updated>2019-11-21T05:14:21.363Z</updated>
     
@@ -216,8 +241,8 @@
   
   <entry>
     <title>unix环境高级编程：文件和目录</title>
-    <link href="liuyun594@github.io/2019/10/29/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/"/>
-    <id>liuyun594@github.io/2019/10/29/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/</id>
+    <link href="liuyun594@github.io/2019/10/29/unix/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/"/>
+    <id>liuyun594@github.io/2019/10/29/unix/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/</id>
     <published>2019-10-29T00:02:44.000Z</published>
     <updated>2019-11-21T05:15:40.343Z</updated>
     
@@ -241,8 +266,8 @@
   
   <entry>
     <title>unix环境高级编程：非缓冲IO</title>
-    <link href="liuyun594@github.io/2019/10/28/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E9%9D%9E%E7%BC%93%E5%86%B2IO/"/>
-    <id>liuyun594@github.io/2019/10/28/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E9%9D%9E%E7%BC%93%E5%86%B2IO/</id>
+    <link href="liuyun594@github.io/2019/10/28/unix/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E9%9D%9E%E7%BC%93%E5%86%B2IO/"/>
+    <id>liuyun594@github.io/2019/10/28/unix/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%EF%BC%9A%E9%9D%9E%E7%BC%93%E5%86%B2IO/</id>
     <published>2019-10-27T23:29:52.000Z</published>
     <updated>2019-11-21T05:15:26.590Z</updated>
     
