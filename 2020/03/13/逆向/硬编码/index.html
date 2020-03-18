@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="liuyun's blog" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="前言这里记录一些硬编码的知识。">
+<meta name="keywords" content="二进制安全,逆向工程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="硬编码">
+<meta property="og:url" content="liuyun594@github.io&#x2F;2020&#x2F;03&#x2F;13&#x2F;%E9%80%86%E5%90%91&#x2F;%E7%A1%AC%E7%BC%96%E7%A0%81&#x2F;index.html">
+<meta property="og:site_name" content="liuyun&#39;s blog">
+<meta property="og:description" content="前言这里记录一些硬编码的知识。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="&#x2F;images&#x2F;%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%9A%84%E7%BB%93%E6%9E%84.jpg">
+<meta property="og:image" content="&#x2F;images&#x2F;ModR_M.jpg">
+<meta property="og:image" content="&#x2F;images&#x2F;ModR_M%E5%AD%97%E8%8A%82%E8%A1%A8.jpg">
+<meta property="og:updated_time" content="2020-03-18T03:18:44.445Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="&#x2F;images&#x2F;%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%9A%84%E7%BB%93%E6%9E%84.jpg">
+
+<link rel="canonical" href="liuyun594@github.io/2020/03/13/%E9%80%86%E5%90%91/%E7%A1%AC%E7%BC%96%E7%A0%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>硬编码 | liuyun's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">liuyun's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="liuyun594@github.io/2020/03/13/%E9%80%86%E5%90%91/%E7%A1%AC%E7%BC%96%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/image.jpg">
+      <meta itemprop="name" content="liuyun">
+      <meta itemprop="description" content="blog of liuyun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="liuyun's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          硬编码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-13 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-13T00:00:00+08:00">2020-03-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">逆向工程</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这里记录一些硬编码的知识。</p>
+<a id="more"></a>
+
+<br/>
+
+<br />
+
+<h3 id="编码的结构"><a href="#编码的结构" class="headerlink" title="编码的结构"></a>编码的结构</h3><p><img src="/images/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%9A%84%E7%BB%93%E6%9E%84.jpg" alt="编码结构"></p>
+<br />
+
+<br />
+
+<h3 id="常见定长编码"><a href="#常见定长编码" class="headerlink" title="常见定长编码"></a>常见定长编码</h3><h4 id="修改通用寄存器"><a href="#修改通用寄存器" class="headerlink" title="修改通用寄存器"></a>修改通用寄存器</h4><table>
+<thead>
+<tr>
+<th>编码</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x50-0x57</td>
+<td>PUSH EAX-EDI</td>
+</tr>
+<tr>
+<td>0x58-0x5F</td>
+<td>POP EAX-EDI</td>
+</tr>
+<tr>
+<td>0x40-0x47</td>
+<td>INC EAX-EDI</td>
+</tr>
+<tr>
+<td>0x48-0x4F</td>
+<td>DEC EAX-EDI</td>
+</tr>
+<tr>
+<td>0xB0-0xB7 Ib</td>
+<td>MOV AL-DH, Ib</td>
+</tr>
+<tr>
+<td>0xB8-0xBF Id</td>
+<td>MOV EAX-EDI, Id</td>
+</tr>
+<tr>
+<td>0x90</td>
+<td>nop</td>
+</tr>
+<tr>
+<td>0x91-0x97</td>
+<td>XCHG EAX, ECX-EDI</td>
+</tr>
+</tbody></table>
+<p>注1：八大通用寄存器顺序：EAX ECX EDX EBX ESP EBP ESI EDI</p>
+<p>注2：八大八位寄存器顺序：AL CL DL BL AH CH DH BH</p>
+<p>注3：Ib：一个字节大小的立即数</p>
+<p>注4：Id：四个字节大小的立即数</p>
+<br/>
+
+<h4 id="修改EIP"><a href="#修改EIP" class="headerlink" title="修改EIP"></a>修改EIP</h4><h5 id="0x70-0x7F-Ib"><a href="#0x70-0x7F-Ib" class="headerlink" title="0x70-0x7F Ib"></a>0x70-0x7F Ib</h5><table>
+<thead>
+<tr>
+<th>编码</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x70 Ib</td>
+<td>JO</td>
+</tr>
+<tr>
+<td>0x71 Ib</td>
+<td>JNO</td>
+</tr>
+<tr>
+<td>0x72 Ib</td>
+<td>JB/JNAE/JC</td>
+</tr>
+<tr>
+<td>0x73 Ib</td>
+<td>JNB/JAE/JNC</td>
+</tr>
+<tr>
+<td>0x74 Ib</td>
+<td>JE/JZ</td>
+</tr>
+<tr>
+<td>0x75 Ib</td>
+<td>JNE/JNZ</td>
+</tr>
+<tr>
+<td>0x76 Ib</td>
+<td>JBE/JNA</td>
+</tr>
+<tr>
+<td>0x77 Ib</td>
+<td>JNBE/JA</td>
+</tr>
+<tr>
+<td>0x78 Ib</td>
+<td>JS(符号寄存器置1跳转)</td>
+</tr>
+<tr>
+<td>0x79 Ib</td>
+<td>JNS</td>
+</tr>
+<tr>
+<td>0x7A Ib</td>
+<td>JP/JPE（奇偶寄存器）</td>
+</tr>
+<tr>
+<td>0x7B Ib</td>
+<td>JNP/JPO</td>
+</tr>
+<tr>
+<td>0x7C Ib</td>
+<td>JL/JNGE</td>
+</tr>
+<tr>
+<td>0x7D Ib</td>
+<td>JGE/JNL</td>
+</tr>
+<tr>
+<td>0x7E Ib</td>
+<td>JLE/JNG</td>
+</tr>
+<tr>
+<td>0x7F Ib</td>
+<td>JG/JNLE</td>
+</tr>
+</tbody></table>
+<br />
+
+<h5 id="0x0F-80-0x0F-8F-Id"><a href="#0x0F-80-0x0F-8F-Id" class="headerlink" title="0x0F 80 - 0x0F 8F Id"></a>0x0F 80 - 0x0F 8F Id</h5><table>
+<thead>
+<tr>
+<th>编码</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x0F 80 Id</td>
+<td>JO</td>
+</tr>
+<tr>
+<td>0x0F 81 Id</td>
+<td>JNO</td>
+</tr>
+<tr>
+<td>0x0F 82 Id</td>
+<td>JB/JNAE/JC</td>
+</tr>
+<tr>
+<td>0x0F 83 Id</td>
+<td>JNB/JAE/JNC</td>
+</tr>
+<tr>
+<td>0x0F 84 Id</td>
+<td>JE/JZ</td>
+</tr>
+<tr>
+<td>0x0F 85 Id</td>
+<td>JNE/JNZ</td>
+</tr>
+<tr>
+<td>0x0F 86 Id</td>
+<td>JBE/JNA</td>
+</tr>
+<tr>
+<td>0x0F 87 Id</td>
+<td>JNBE/JA</td>
+</tr>
+<tr>
+<td>0x0F 88 Id</td>
+<td>JS(符号寄存器置1跳转)</td>
+</tr>
+<tr>
+<td>0x0F 89 Id</td>
+<td>JNS</td>
+</tr>
+<tr>
+<td>0x0F 8A Id</td>
+<td>JP/JPE（奇偶寄存器）</td>
+</tr>
+<tr>
+<td>0x0F 8B Id</td>
+<td>JNP/JPO</td>
+</tr>
+<tr>
+<td>0x0F 8C Id</td>
+<td>JL/JNGE</td>
+</tr>
+<tr>
+<td>0x0F 8D Id</td>
+<td>JGE/JNL</td>
+</tr>
+<tr>
+<td>0x0F 8E Id</td>
+<td>JLE/JNG</td>
+</tr>
+<tr>
+<td>0x0F 8F Id</td>
+<td>JG/JNLE</td>
+</tr>
+</tbody></table>
+<br/>
+
+<h5 id="其他指令"><a href="#其他指令" class="headerlink" title="其他指令"></a>其他指令</h5><table>
+<thead>
+<tr>
+<th>编码</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0xE0 Ib</td>
+<td>LOOPNE/LOOPNZ</td>
+</tr>
+<tr>
+<td>0xE1 Ib</td>
+<td>LOOPZ/LOOPE</td>
+</tr>
+<tr>
+<td>0xE2 Ib</td>
+<td>LOOP</td>
+</tr>
+<tr>
+<td>0xE3 Ib</td>
+<td>JECXZ(JRCXZ)</td>
+</tr>
+<tr>
+<td>0xE8 Id</td>
+<td>CALL</td>
+</tr>
+<tr>
+<td>0xE9 Id</td>
+<td>JMP NEAR</td>
+</tr>
+<tr>
+<td>0xEA Ap</td>
+<td>JMP FAR</td>
+</tr>
+<tr>
+<td>0xEB Ib</td>
+<td>JMP SHORT</td>
+</tr>
+<tr>
+<td>0xC3</td>
+<td>RET</td>
+</tr>
+<tr>
+<td>0xC2 Iw</td>
+<td>RET Iw</td>
+</tr>
+<tr>
+<td>0xCB</td>
+<td>RETF</td>
+</tr>
+<tr>
+<td>0xCA Iw</td>
+<td>RETF Iw</td>
+</tr>
+</tbody></table>
+<p>注5：Ap：6字节长的地址</p>
+<p>注6：Iw：2字节长的立即数</p>
+<br/>
+
+<br />
+
+<h3 id="经典变长指令——ModR-M"><a href="#经典变长指令——ModR-M" class="headerlink" title="经典变长指令——ModR/M"></a>经典变长指令——ModR/M</h3><table>
+<thead>
+<tr>
+<th>编码</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x88</td>
+<td>MOV Eb, Gb</td>
+</tr>
+<tr>
+<td>0x89</td>
+<td>MOV Ev, Gv</td>
+</tr>
+<tr>
+<td>0x8A</td>
+<td>MOV Gb, Eb</td>
+</tr>
+<tr>
+<td>0x8B</td>
+<td>MOV Gv, Ev</td>
+</tr>
+</tbody></table>
+<p>注7：</p>
+<ul>
+<li>G：通用寄存器</li>
+<li>E：寄存器/内存</li>
+<li>b：字节</li>
+<li>v：Word，doubleworld 或quadword</li>
+</ul>
+<br />
+
+<p>当指令中出现内存操作对象的时候，就需要在操作码后面附加一个字节来进行补充说明，这个字节被称为ModR/M。该字节的8个位被分成了三部分：</p>
+<p><img src="/images/ModR_M.jpg" alt="ModR/M"></p>
+<p>其中，Reg/Opcode（第3、4、5位，共三位）描述指令中的G部分，即寄存器</p>
+<table>
+<thead>
+<tr>
+<th align="center">寄存器宽度</th>
+<th align="center">000</th>
+<th align="center">001</th>
+<th align="center">010</th>
+<th align="center">011</th>
+<th align="center">100</th>
+<th align="center">101</th>
+<th align="center">110</th>
+<th align="center">111</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">32</td>
+<td align="center">EAX</td>
+<td align="center">ECX</td>
+<td align="center">EDX</td>
+<td align="center">EBX</td>
+<td align="center">ESP</td>
+<td align="center">EBP</td>
+<td align="center">ESI</td>
+<td align="center">EDI</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center">AL</td>
+<td align="center">CL</td>
+<td align="center">DL</td>
+<td align="center">BL</td>
+<td align="center">AH</td>
+<td align="center">CH</td>
+<td align="center">DH</td>
+<td align="center">BH</td>
+</tr>
+</tbody></table>
+<p>Mod部分和R/M部分描述E部分，其对照表如下：</p>
+<p><img src="/images/ModR_M%E5%AD%97%E8%8A%82%E8%A1%A8.jpg" alt="ModR_M字节表"></p>
+<p>其中要注意的是：</p>
+<ul>
+<li>操作内存时，R/M为100时指令与其他不同</li>
+<li>Mod为00时，按顺序为EBP寄存器的位置变为32未立即数</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/" rel="tag"># 二进制安全</a>
+              <a href="/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" rel="tag"># 逆向工程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/03/05/win32/Win32%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0%E5%AF%B9%E7%85%A7/" rel="next" title="Win32字符串函数对照">
+                  <i class="fa fa-chevron-left"></i> Win32字符串函数对照
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编码的结构"><span class="nav-number">2.</span> <span class="nav-text">编码的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见定长编码"><span class="nav-number">3.</span> <span class="nav-text">常见定长编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修改通用寄存器"><span class="nav-number">3.1.</span> <span class="nav-text">修改通用寄存器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改EIP"><span class="nav-number">3.2.</span> <span class="nav-text">修改EIP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#0x70-0x7F-Ib"><span class="nav-number">3.2.1.</span> <span class="nav-text">0x70-0x7F Ib</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#0x0F-80-0x0F-8F-Id"><span class="nav-number">3.2.2.</span> <span class="nav-text">0x0F 80 - 0x0F 8F Id</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#其他指令"><span class="nav-number">3.2.3.</span> <span class="nav-text">其他指令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#经典变长指令——ModR-M"><span class="nav-number">4.</span> <span class="nav-text">经典变长指令——ModR/M</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="liuyun"
+      src="/images/image.jpg">
+  <p class="site-author-name" itemprop="name">liuyun</p>
+  <div class="site-description" itemprop="description">blog of liuyun</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">liuyun</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

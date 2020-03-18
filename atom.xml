@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="liuyun594@github.io/"/>
-  <updated>2020-03-05T04:57:38.732Z</updated>
+  <updated>2020-03-18T03:18:44.445Z</updated>
   <id>liuyun594@github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>硬编码</title>
+    <link href="liuyun594@github.io/2020/03/13/%E9%80%86%E5%90%91/%E7%A1%AC%E7%BC%96%E7%A0%81/"/>
+    <id>liuyun594@github.io/2020/03/13/%E9%80%86%E5%90%91/%E7%A1%AC%E7%BC%96%E7%A0%81/</id>
+    <published>2020-03-12T16:00:00.000Z</published>
+    <updated>2020-03-18T03:18:44.445Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这里记录一些硬编码的知识。</p><a id="more"></a><br/><br /><h3 id="编码的结构"><a href="#编码的结构" class="headerlink" title="编码的结构"></a>编码的结构</h3><p><img src="/images/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%9A%84%E7%BB%93%E6%9E%84.jpg" alt="编码结构"></p><br /><br /><h3 id="常见定长编码"><a href="#常见定长编码" class="headerlink" title="常见定长编码"></a>常见定长编码</h3><h4 id="修改通用寄存器"><a href="#修改通用寄存器" class="headerlink" title="修改通用寄存器"></a>修改通用寄存器</h4><table><thead><tr><th>编码</th><th>意义</th></tr></thead><tbody><tr><td>0x50-0x57</td><td>PUSH EAX-EDI</td></tr><tr><td>0x58-0x5F</td><td>POP EAX-EDI</td></tr><tr><td>0x40-0x47</td><td>INC EAX-EDI</td></tr><tr><td>0x48-0x4F</td><td>DEC EAX-EDI</td></tr><tr><td>0xB0-0xB7 Ib</td><td>MOV AL-DH, Ib</td></tr><tr><td>0xB8-0xBF Id</td><td>MOV EAX-EDI, Id</td></tr><tr><td>0x90</td><td>nop</td></tr><tr><td>0x91-0x97</td><td>XCHG EAX, ECX-EDI</td></tr></tbody></table><p>注1：八大通用寄存器顺序：EAX ECX EDX EBX ESP EBP ESI EDI</p><p>注2：八大八位寄存器顺序：AL CL DL BL AH CH DH BH</p><p>注3：Ib：一个字节大小的立即数</p><p>注4：Id：四个字节大小的立即数</p><br/><h4 id="修改EIP"><a href="#修改EIP" class="headerlink" title="修改EIP"></a>修改EIP</h4><h5 id="0x70-0x7F-Ib"><a href="#0x70-0x7F-Ib" class="headerlink" title="0x70-0x7F Ib"></a>0x70-0x7F Ib</h5><table><thead><tr><th>编码</th><th>意义</th></tr></thead><tbody><tr><td>0x70 Ib</td><td>JO</td></tr><tr><td>0x71 Ib</td><td>JNO</td></tr><tr><td>0x72 Ib</td><td>JB/JNAE/JC</td></tr><tr><td>0x73 Ib</td><td>JNB/JAE/JNC</td></tr><tr><td>0x74 Ib</td><td>JE/JZ</td></tr><tr><td>0x75 Ib</td><td>JNE/JNZ</td></tr><tr><td>0x76 Ib</td><td>JBE/JNA</td></tr><tr><td>0x77 Ib</td><td>JNBE/JA</td></tr><tr><td>0x78 Ib</td><td>JS(符号寄存器置1跳转)</td></tr><tr><td>0x79 Ib</td><td>JNS</td></tr><tr><td>0x7A Ib</td><td>JP/JPE（奇偶寄存器）</td></tr><tr><td>0x7B Ib</td><td>JNP/JPO</td></tr><tr><td>0x7C Ib</td><td>JL/JNGE</td></tr><tr><td>0x7D Ib</td><td>JGE/JNL</td></tr><tr><td>0x7E Ib</td><td>JLE/JNG</td></tr><tr><td>0x7F Ib</td><td>JG/JNLE</td></tr></tbody></table><br /><h5 id="0x0F-80-0x0F-8F-Id"><a href="#0x0F-80-0x0F-8F-Id" class="headerlink" title="0x0F 80 - 0x0F 8F Id"></a>0x0F 80 - 0x0F 8F Id</h5><table><thead><tr><th>编码</th><th>意义</th></tr></thead><tbody><tr><td>0x0F 80 Id</td><td>JO</td></tr><tr><td>0x0F 81 Id</td><td>JNO</td></tr><tr><td>0x0F 82 Id</td><td>JB/JNAE/JC</td></tr><tr><td>0x0F 83 Id</td><td>JNB/JAE/JNC</td></tr><tr><td>0x0F 84 Id</td><td>JE/JZ</td></tr><tr><td>0x0F 85 Id</td><td>JNE/JNZ</td></tr><tr><td>0x0F 86 Id</td><td>JBE/JNA</td></tr><tr><td>0x0F 87 Id</td><td>JNBE/JA</td></tr><tr><td>0x0F 88 Id</td><td>JS(符号寄存器置1跳转)</td></tr><tr><td>0x0F 89 Id</td><td>JNS</td></tr><tr><td>0x0F 8A Id</td><td>JP/JPE（奇偶寄存器）</td></tr><tr><td>0x0F 8B Id</td><td>JNP/JPO</td></tr><tr><td>0x0F 8C Id</td><td>JL/JNGE</td></tr><tr><td>0x0F 8D Id</td><td>JGE/JNL</td></tr><tr><td>0x0F 8E Id</td><td>JLE/JNG</td></tr><tr><td>0x0F 8F Id</td><td>JG/JNLE</td></tr></tbody></table><br/><h5 id="其他指令"><a href="#其他指令" class="headerlink" title="其他指令"></a>其他指令</h5><table><thead><tr><th>编码</th><th>意义</th></tr></thead><tbody><tr><td>0xE0 Ib</td><td>LOOPNE/LOOPNZ</td></tr><tr><td>0xE1 Ib</td><td>LOOPZ/LOOPE</td></tr><tr><td>0xE2 Ib</td><td>LOOP</td></tr><tr><td>0xE3 Ib</td><td>JECXZ(JRCXZ)</td></tr><tr><td>0xE8 Id</td><td>CALL</td></tr><tr><td>0xE9 Id</td><td>JMP NEAR</td></tr><tr><td>0xEA Ap</td><td>JMP FAR</td></tr><tr><td>0xEB Ib</td><td>JMP SHORT</td></tr><tr><td>0xC3</td><td>RET</td></tr><tr><td>0xC2 Iw</td><td>RET Iw</td></tr><tr><td>0xCB</td><td>RETF</td></tr><tr><td>0xCA Iw</td><td>RETF Iw</td></tr></tbody></table><p>注5：Ap：6字节长的地址</p><p>注6：Iw：2字节长的立即数</p><br/><br /><h3 id="经典变长指令——ModR-M"><a href="#经典变长指令——ModR-M" class="headerlink" title="经典变长指令——ModR/M"></a>经典变长指令——ModR/M</h3><table><thead><tr><th>编码</th><th>意义</th></tr></thead><tbody><tr><td>0x88</td><td>MOV Eb, Gb</td></tr><tr><td>0x89</td><td>MOV Ev, Gv</td></tr><tr><td>0x8A</td><td>MOV Gb, Eb</td></tr><tr><td>0x8B</td><td>MOV Gv, Ev</td></tr></tbody></table><p>注7：</p><ul><li>G：通用寄存器</li><li>E：寄存器/内存</li><li>b：字节</li><li>v：Word，doubleworld 或quadword</li></ul><br /><p>当指令中出现内存操作对象的时候，就需要在操作码后面附加一个字节来进行补充说明，这个字节被称为ModR/M。该字节的8个位被分成了三部分：</p><p><img src="/images/ModR_M.jpg" alt="ModR/M"></p><p>其中，Reg/Opcode（第3、4、5位，共三位）描述指令中的G部分，即寄存器</p><table><thead><tr><th align="center">寄存器宽度</th><th align="center">000</th><th align="center">001</th><th align="center">010</th><th align="center">011</th><th align="center">100</th><th align="center">101</th><th align="center">110</th><th align="center">111</th></tr></thead><tbody><tr><td align="center">32</td><td align="center">EAX</td><td align="center">ECX</td><td align="center">EDX</td><td align="center">EBX</td><td align="center">ESP</td><td align="center">EBP</td><td align="center">ESI</td><td align="center">EDI</td></tr><tr><td align="center">8</td><td align="center">AL</td><td align="center">CL</td><td align="center">DL</td><td align="center">BL</td><td align="center">AH</td><td align="center">CH</td><td align="center">DH</td><td align="center">BH</td></tr></tbody></table><p>Mod部分和R/M部分描述E部分，其对照表如下：</p><p><img src="/images/ModR_M%E5%AD%97%E8%8A%82%E8%A1%A8.jpg" alt="ModR_M字节表"></p><p>其中要注意的是：</p><ul><li>操作内存时，R/M为100时指令与其他不同</li><li>Mod为00时，按顺序为EBP寄存器的位置变为32未立即数</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;这里记录一些硬编码的知识。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="逆向工程" scheme="liuyun594@github.io/categories/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/"/>
+    
+    
+      <category term="二进制安全" scheme="liuyun594@github.io/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/"/>
+    
+      <category term="逆向工程" scheme="liuyun594@github.io/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/"/>
+    
+  </entry>
   
   <entry>
     <title>Win32字符串函数对照</title>
